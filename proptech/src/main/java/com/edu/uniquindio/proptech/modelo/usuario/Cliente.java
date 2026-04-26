@@ -9,12 +9,13 @@ import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import lombok.Data;
 
 @Data
-public class Cliente {
+public class Cliente extends Usuario {
     String id;
     String nombre;
     String correo;
     String telefono;
     String tipoCliente;
+    String contrasenia;
     double presupuesto;
 
     Lista<String> zonasInteres;
@@ -27,11 +28,8 @@ public class Cliente {
     Lista<Inmueble> historialConsultas;
     Lista<Visita> historialVisitas;
 
-    public Cliente(String id, String nombre, String correo, String telefono, String tipoCliente, double presupuesto) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.telefono = telefono;
+    public Cliente(String id, String nombre, String correo, String telefono, String tipoCliente, String contrasenia, double presupuesto) {
+        super(id, nombre, correo, telefono, contrasenia);
         this.tipoCliente = tipoCliente;
         this.presupuesto = presupuesto;
         this.zonasInteres = new ListaDoble<String>();
