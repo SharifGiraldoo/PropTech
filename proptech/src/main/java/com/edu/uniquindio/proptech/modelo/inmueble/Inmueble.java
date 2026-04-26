@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.modelo.entidades.inmueble;
+package com.edu.uniquindio.proptech.modelo.inmueble;
 
 public class Inmueble {
 }
