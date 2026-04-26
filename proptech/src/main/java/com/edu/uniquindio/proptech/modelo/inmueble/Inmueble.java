@@ -1,6 +1,7 @@
 package com.edu.uniquindio.proptech.modelo.inmueble;
 
 import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
+import com.edu.uniquindio.proptech.modelo.inmueble.TipoInmueble;
 import lombok.Data;
 
 @Data
@@ -9,7 +10,7 @@ public class Inmueble {
     String direccion;
     String ciudad;
     String zona;
-    String tipo;
+    TipoInmueble tipoInmueble;
     String finalidad;
     double precio;
     double area;
@@ -19,12 +20,12 @@ public class Inmueble {
     boolean disponible;
     Asesor asesorResponsable;
 
-    public Inmueble(String codigo, String direccion, String ciudad, String zona, String tipo, String finalidad, double precio, double area, int habitaciones, int banios, String estado, boolean disponible, Asesor asesorResponsable) {
+    public Inmueble(String codigo, String direccion, String ciudad, String zona, TipoInmueble tipoInmueble, String finalidad, double precio, double area, int habitaciones, int banios, String estado, boolean disponible, Asesor asesorResponsable) {
         this.codigo = codigo;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.zona = zona;
-        this.tipo = tipo;
+        this.tipoInmueble = tipoInmueble;
         this.finalidad = finalidad;
         this.precio = precio;
         this.area = area;
