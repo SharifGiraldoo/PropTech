@@ -4,7 +4,7 @@ import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
 import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
-import com.edu.uniquindio.proptech.modelo.utils.Alerta;
+import com.edu.uniquindio.proptech.utils.alerta.Alerta;
 
 public interface ISistemaInmobiliario {
     void registrarCliente(Cliente cliente);
