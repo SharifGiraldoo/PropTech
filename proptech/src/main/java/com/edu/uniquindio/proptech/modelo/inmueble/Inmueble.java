@@ -16,11 +16,11 @@ public class Inmueble {
     double area;
     int habitaciones;
     int banios;
-    String estado;
+    EstadoInmueble estado;
     boolean disponible;
     Asesor asesorResponsable;
 
-    public Inmueble(String codigo, String direccion, String ciudad, String zona, TipoInmueble tipoInmueble, String finalidad, double precio, double area, int habitaciones, int banios, String estado, boolean disponible, Asesor asesorResponsable) {
+    public Inmueble(String codigo, String direccion, String ciudad, String zona, TipoInmueble tipoInmueble, String finalidad, double precio, double area, int habitaciones, int banios, EstadoInmueble estado, boolean disponible, Asesor asesorResponsable) {
         this.codigo = codigo;
         this.direccion = direccion;
         this.ciudad = ciudad;

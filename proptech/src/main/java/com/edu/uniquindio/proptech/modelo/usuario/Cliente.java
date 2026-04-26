@@ -7,8 +7,11 @@ import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
 import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Cliente extends Usuario {
     String id;
     String nombre;
