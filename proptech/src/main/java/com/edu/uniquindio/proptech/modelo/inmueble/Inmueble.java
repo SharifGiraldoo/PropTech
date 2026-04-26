@@ -17,10 +17,9 @@ public class Inmueble {
     int habitaciones;
     int banios;
     EstadoInmueble estado;
-    boolean disponible;
     Asesor asesorResponsable;
 
-    public Inmueble(String codigo, String direccion, String ciudad, String zona, TipoInmueble tipoInmueble, String finalidad, double precio, double area, int habitaciones, int banios, EstadoInmueble estado, boolean disponible, Asesor asesorResponsable) {
+    public Inmueble(String codigo, String direccion, String ciudad, String zona, TipoInmueble tipoInmueble, String finalidad, double precio, double area, int habitaciones, int banios, EstadoInmueble estado, Asesor asesorResponsable) {
         this.codigo = codigo;
         this.direccion = direccion;
         this.ciudad = ciudad;
@@ -32,7 +31,6 @@ public class Inmueble {
         this.habitaciones = habitaciones;
         this.banios = banios;
         this.estado = estado;
-        this.disponible = true;
         this.asesorResponsable = asesorResponsable;
     }
 }
