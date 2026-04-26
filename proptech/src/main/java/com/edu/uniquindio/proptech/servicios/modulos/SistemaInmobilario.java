@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.servicios;
+package com.edu.uniquindio.proptech.servicios.modulos;
 
 import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;

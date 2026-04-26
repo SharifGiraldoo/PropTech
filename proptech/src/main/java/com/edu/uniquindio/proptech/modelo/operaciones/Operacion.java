@@ -4,6 +4,10 @@ import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
 import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
 import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 
 public class Operacion {
@@ -12,12 +16,12 @@ public class Operacion {
     Cliente cliente;
     Asesor asesor;
     String tipo;
-    String fecha;
+    LocalDate fecha;
     double valor;
     double comision;
     String estado;
 
-    public Operacion(String id, Inmueble inmueble, Cliente cliente, Asesor asesor, String tipo, String fecha, double valor, double comision, String estado) {
+    public Operacion(String id, Inmueble inmueble, Cliente cliente, Asesor asesor, String tipo, LocalDate fecha, double valor, double comision, String estado) {
         this.id = id;
         this.inmueble = inmueble;
         this.cliente = cliente;
