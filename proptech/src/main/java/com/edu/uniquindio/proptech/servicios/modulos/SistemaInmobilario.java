@@ -2,6 +2,7 @@ package com.edu.uniquindio.proptech.servicios.modulos;
 
 import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
 import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
+import com.edu.uniquindio.proptech.modelo.operaciones.Operacion;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
 import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
@@ -23,4 +24,8 @@ public class SistemaInmobilario {
     PriorityQueue<Alerta> alertas;
 
     ListaSimple<Operacion> operaciones;
+
+    public SistemaInmobilario() {
+        operaciones = new ListaSimple<>();
+    }
 }
