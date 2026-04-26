@@ -15,13 +15,13 @@ public class Operacion {
     Inmueble inmueble;
     Cliente cliente;
     Asesor asesor;
-    String tipo;
+    TipoOperacion tipo;
     LocalDate fecha;
     double valor;
     double comision;
-    String estado;
+    EstadoOperacion estado;
 
-    public Operacion(String id, Inmueble inmueble, Cliente cliente, Asesor asesor, String tipo, LocalDate fecha, double valor, double comision, String estado) {
+    public Operacion(String id, Inmueble inmueble, Cliente cliente, Asesor asesor, TipoOperacion tipo, LocalDate fecha, double valor, double comision, EstadoOperacion estado) {
         this.id = id;
         this.inmueble = inmueble;
         this.cliente = cliente;
