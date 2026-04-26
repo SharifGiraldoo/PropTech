@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.modelo.entidades.usuario;
+package com.edu.uniquindio.proptech.modelo.usuario;
 
 public class Cliente {
 }

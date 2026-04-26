@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.modelo.entidades.operaciones;
+package com.edu.uniquindio.proptech.modelo.operaciones;
 
 public class Operacion {
 }
