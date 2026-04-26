@@ -1,8 +1,8 @@
 package com.edu.uniquindio.proptech.estructuras.lista;
 
-import com.edu.uniquindio.proptech.utils.Excepciones.ElementoNoEncontradoException;
-import com.edu.uniquindio.proptech.utils.Excepciones.ListaVaciaException;
-import com.edu.uniquindio.proptech.utils.Excepciones.PosicionInvalidaException;
+import com.edu.uniquindio.proptech.utils.excepciones.ElementoNoEncontradoException;
+import com.edu.uniquindio.proptech.utils.excepciones.ListaVaciaException;
+import com.edu.uniquindio.proptech.utils.excepciones.PosicionInvalidaException;
 
 /**
  * Implementacion de una lista simplemente enlazada generica.

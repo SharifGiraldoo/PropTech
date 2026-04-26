@@ -2,8 +2,8 @@ package com.edu.uniquindio.proptech.servicios.modulos;
 
 import com.edu.uniquindio.proptech.modelo.usuario.Usuario;
 import com.edu.uniquindio.proptech.servicios.interfaces.IUsuario;
-import com.edu.uniquindio.proptech.utils.Excepciones.ElementoNoEncontradoException;
-import com.edu.uniquindio.proptech.utils.Excepciones.ParametroVacioException;
+import com.edu.uniquindio.proptech.utils.excepciones.ElementoNoEncontradoException;
+import com.edu.uniquindio.proptech.utils.excepciones.ParametroVacioException;
 
 public class ServiciosUsuario implements IUsuario {
 

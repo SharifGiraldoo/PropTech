@@ -1,7 +1,7 @@
 package com.edu.uniquindio.proptech.estructuras.pila;
 
 import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
-import com.edu.uniquindio.proptech.utils.Excepciones.ListaVaciaException;
+import com.edu.uniquindio.proptech.utils.excepciones.ListaVaciaException;
 
 /**
  * Implementacion de una pila generica usando lista simplemente enlazada.

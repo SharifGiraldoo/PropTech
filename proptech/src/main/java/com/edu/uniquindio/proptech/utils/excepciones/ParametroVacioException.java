@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.utils.Excepciones;
+package com.edu.uniquindio.proptech.utils.excepciones;
 
 /**
  * Excepcion lanzada cuando el parametro esta vacio.

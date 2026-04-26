@@ -4,8 +4,7 @@ import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
 import com.edu.uniquindio.proptech.servicios.interfaces.ICliente;
-import com.edu.uniquindio.proptech.utils.Excepciones.ParametroVacioException;
-import com.edu.uniquindio.proptech.utils.Excepciones.PosicionInvalidaException;
+import com.edu.uniquindio.proptech.utils.excepciones.ParametroVacioException;
 
 public class ServiciosCliente implements ICliente {
     @Override
