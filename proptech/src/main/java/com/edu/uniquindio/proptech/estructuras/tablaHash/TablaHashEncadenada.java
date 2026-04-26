@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.estructuras.TablaHash;
+package com.edu.uniquindio.proptech.estructuras.tablaHash;
 
 import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
 import com.edu.uniquindio.proptech.utils.excepciones.ElementoNoEncontradoException;

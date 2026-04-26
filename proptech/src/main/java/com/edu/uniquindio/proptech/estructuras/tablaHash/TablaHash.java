@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.estructuras.TablaHash;
+package com.edu.uniquindio.proptech.estructuras.tablaHash;
 
 /**
  * Interfaz que define el comportamiento de una tabla hash generica.
