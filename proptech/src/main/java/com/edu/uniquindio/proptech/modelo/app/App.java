@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech;
+package com.edu.uniquindio.proptech.modelo.app;
 
 /**
  * Hello world!
