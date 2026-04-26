@@ -6,7 +6,7 @@ import com.edu.uniquindio.proptech.modelo.operaciones.Operacion;
 import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
 import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
 import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
-import com.edu.uniquindio.proptech.utils.Alerta;
+import com.edu.uniquindio.proptech.utils.alerta.Alerta;
 import lombok.Getter;
 import lombok.Setter;
 

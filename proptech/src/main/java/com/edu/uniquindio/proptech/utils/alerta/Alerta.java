@@ -1,4 +1,4 @@
-package com.edu.uniquindio.proptech.utils;
+package com.edu.uniquindio.proptech.utils.alerta;
 
 import lombok.Data;
 
