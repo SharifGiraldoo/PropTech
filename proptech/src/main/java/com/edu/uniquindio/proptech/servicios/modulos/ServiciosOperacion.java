@@ -3,13 +3,13 @@ package com.edu.uniquindio.proptech.servicios.modulos;
 import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
 import com.edu.uniquindio.proptech.modelo.operaciones.EstadoOperacion;
 import com.edu.uniquindio.proptech.modelo.operaciones.Operacion;
-import com.edu.uniquindio.proptech.servicios.modulos.SistemaInmobilario;
+import com.edu.uniquindio.proptech.servicios.modulos.SistemaInmobiliario;
 import com.edu.uniquindio.proptech.servicios.interfaces.IOperacion;
 
 public class ServiciosOperacion implements IOperacion {
     @Override
     public void calcularComision(Operacion operacion) {
-        SistemaInmobilario sistemaInmobilario = new SistemaInmobilario();
+        SistemaInmobiliario sistemaInmobilario = new SistemaInmobiliario();
         ListaSimple<Operacion> operaciones = sistemaInmobilario.getOperaciones();
 
         double comision = 0;
