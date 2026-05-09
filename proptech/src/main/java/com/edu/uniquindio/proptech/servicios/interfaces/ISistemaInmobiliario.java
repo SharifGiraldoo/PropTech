@@ -13,7 +13,7 @@ public interface ISistemaInmobiliario {
     Cliente buscarCliente(String id);
     Inmueble buscarInmueble(String codigo);
     void agendarVisita(Visita visita);
-    void atenderVisita();
+    void atenderVisita(Visita visita);
     void generarAlerta(Alerta alerta);
     Alerta obtenerAlertaPrioritaria();
 
