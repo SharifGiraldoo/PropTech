@@ -7,10 +7,10 @@ public class Alerta {
 
     String tipo;
     String mensaje;
-    String nivel;
+    NivelAlerta nivel;
     String fecha;
 
-    public Alerta(String tipo, String mensaje, String nivel, String fecha) {
+    public Alerta(String tipo, String mensaje, NivelAlerta nivel, String fecha) {
         this.tipo = tipo;
         this.mensaje = mensaje;
         this.nivel = nivel;
