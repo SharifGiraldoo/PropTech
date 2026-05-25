@@ -1,7 +1,5 @@
 package com.edu.uniquindio.proptech.modelo.inmueble;
 
 public enum EstadoInmueble {
-    RESERVADO,
-    VENDIDO,
-    ARRENDADO
+    DISPONIBLE, ARRENDADO, VENDIDO, RESERVADO, MANTENIMIENTO
 }

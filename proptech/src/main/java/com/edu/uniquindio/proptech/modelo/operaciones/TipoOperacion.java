@@ -1,8 +1,3 @@
 package com.edu.uniquindio.proptech.modelo.operaciones;
 
-public enum TipoOperacion {
-    ARRIENDO,
-    VENTA,
-    RENOVACIONCONTRATO,
-    CANCELACIONCONTRATO
-}
+public enum TipoOperacion { VENTA, ARRIENDO, RENOVACION }

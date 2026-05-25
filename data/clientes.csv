@@ -1,0 +1,4 @@
+id|nombre|correo|telefono|contrasenia|tipoCliente|presupuesto|zonasInteres|tipoDeseado|minHabitaciones|estadoBusqueda|fotoPerfil
+CLI-001|Mario Restrepo|mario@gmail.com|300-111-1111|mar123|COMPRADOR|3.5E8|Norte,Centro|APARTAMENTO|2|BUSCANDO|
+CLI-002|Sandra Vélez|sandra@gmail.com|300-222-2222|san123|ARRENDATARIO|2500000.0|Sur,Centro|CASA|3|BUSCANDO|
+CLI-003|Pedro Salcedo|pedro@gmail.com|300-333-3333|ped123|INVERSIONISTA|8.0E8|Industrial|LOCALCOMERCIAL|0|BUSCANDO|

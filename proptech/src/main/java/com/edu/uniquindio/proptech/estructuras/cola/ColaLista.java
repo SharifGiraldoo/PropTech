@@ -1,44 +1,31 @@
 package com.edu.uniquindio.proptech.estructuras.cola;
 
-import com.edu.uniquindio.proptech.utils.excepciones.ListaVaciaException;
+import com.edu.uniquindio.proptech.estructuras.lista.Nodo;
 
 /**
- * Implementacion de una cola generica usando lista simplemente enlazada.
- * Permite gestionar visitas en orden de llegada.
- * Autores: [Sharif Giraldo Obando, Juan Sebastián Hernández y Santiago Ospina Sánchez]
- * Fecha de creacion: 2026-04-26
- * Licencia: MIT
+ * Cola FIFO implementada con nodos enlazados.
+ * Usada para programación de visitas.
+ *
+ * Autores: Sharif Giraldo Obando, Juan Sebastián Hernández, Santiago Ospina Sánchez
  */
 public class ColaLista<T> implements Cola<T> {
 
-    private class Nodo {
-        T dato;
-        Nodo siguiente;
-
-        Nodo(T dato) {
-            this.dato = dato;
-        }
-    }
-
-    private Nodo frente;
-    private Nodo fin;
+    private Nodo<T> frente;
+    private Nodo<T> fin;
     private int tamanio;
 
     public ColaLista() {
-        frente = fin = null;
-        tamanio = 0;
+        this.frente = null;
+        this.fin = null;
+        this.tamanio = 0;
     }
 
-    /**
-     * Inserta un elemento en la cola.
-     * @param dato elemento a insertar
-     */
     @Override
-    public void encolar(T dato) {
-        Nodo nuevo = new Nodo(dato);
-
-        if (estaVacia()) {
-            frente = fin = nuevo;
+    public void encolar(T elemento) {
+        Nodo<T> nuevo = new Nodo<>(elemento);
+        if (fin == null) {
+            frente = nuevo;
+            fin = nuevo;
         } else {
             fin.siguiente = nuevo;
             fin = nuevo;
@@ -46,55 +33,38 @@ public class ColaLista<T> implements Cola<T> {
         tamanio++;
     }
 
-    /**
-     * Elimina y retorna el primer elemento.
-     * @return elemento eliminado
-     * @throws ListaVaciaException si la cola esta vacia
-     */
     @Override
     public T desencolar() {
-        if (estaVacia())
-            throw new ListaVaciaException("Cola vacia");
-
+        if (estaVacia()) throw new java.util.NoSuchElementException("Cola vacía");
         T dato = frente.dato;
         frente = frente.siguiente;
-
-        if (frente == null) {
-            fin = null;
-        }
-
+        if (frente == null) fin = null;
         tamanio--;
         return dato;
     }
 
-    /**
-     * Retorna el primer elemento sin eliminarlo.
-     * @return elemento en el frente
-     * @throws ListaVaciaException si la cola esta vacia
-     */
     @Override
     public T frente() {
-        if (estaVacia())
-            throw new ListaVaciaException("Cola vacia");
-
+        if (estaVacia()) return null;
         return frente.dato;
     }
 
-    /**
-     * Verifica si la cola esta vacia.
-     * @return true si esta vacia
-     */
     @Override
-    public boolean estaVacia() {
-        return frente == null;
-    }
+    public boolean estaVacia() { return tamanio == 0; }
 
-    /**
-     * Retorna el tamanio de la cola.
-     * @return numero de elementos
-     */
     @Override
-    public int tamanio() {
-        return tamanio;
+    public int tamanio() { return tamanio; }
+
+    /** Copia los primeros n elementos sin modificar la cola. */
+    public java.util.List<T> peekN(int n) {
+        java.util.List<T> result = new java.util.ArrayList<>();
+        Nodo<T> actual = frente;
+        int i = 0;
+        while (actual != null && i < n) {
+            result.add(actual.dato);
+            actual = actual.siguiente;
+            i++;
+        }
+        return result;
     }
 }

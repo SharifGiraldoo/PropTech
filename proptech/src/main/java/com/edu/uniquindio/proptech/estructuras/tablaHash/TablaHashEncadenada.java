@@ -1,151 +1,125 @@
 package com.edu.uniquindio.proptech.estructuras.tablaHash;
 
-import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
-import com.edu.uniquindio.proptech.utils.excepciones.ElementoNoEncontradoException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Implementacion de una tabla hash generica usando encadenamiento.
- * Utiliza listas simplemente enlazadas para manejar colisiones.
- * Autores: [Sharif Giraldo Obando, Juan Sebastián Hernández y Santiago Ospina Sánchez]
- * Fecha de creacion: 2026-04-26
- * Licencia: MIT
+ * Tabla hash con encadenamiento (separate chaining).
+ * Complejidad promedio: O(1) inserción, búsqueda y eliminación.
+ * Usada para acceso rápido a clientes, inmuebles y asesores.
+ *
+ * Autores: Sharif Giraldo Obando, Juan Sebastián Hernández, Santiago Ospina Sánchez
  */
 public class TablaHashEncadenada<K, V> implements TablaHash<K, V> {
 
-    /**
-     * Clase interna que representa un par clave-valor.
-     */
-    private class Entry {
-        K clave;
-        V valor;
+    private static final int CAPACIDAD_DEFAULT = 16;
+    private static final double FACTOR_CARGA = 0.75;
 
-        Entry(K clave, V valor) {
-            this.clave = clave;
-            this.valor = valor;
-        }
-    }
-
-    private ListaSimple<Entry>[] buckets;
-    private int capacidad;
+    private LinkedList<Entrada<K, V>>[] tabla;
     private int tamanio;
+    private int capacidad;
+
+    @SuppressWarnings("unchecked")
+    public TablaHashEncadenada() {
+        this.capacidad = CAPACIDAD_DEFAULT;
+        this.tabla = new LinkedList[capacidad];
+        this.tamanio = 0;
+    }
 
     @SuppressWarnings("unchecked")
     public TablaHashEncadenada(int capacidad) {
         this.capacidad = capacidad;
-        this.buckets = new ListaSimple[capacidad];
+        this.tabla = new LinkedList[capacidad];
         this.tamanio = 0;
     }
 
-    /**
-     * Calcula el indice en el arreglo para una clave.
-     * @param clave clave
-     * @return indice
-     */
     private int hash(K clave) {
-        return Math.abs(clave.hashCode()) % capacidad;
+        return Math.abs(clave.hashCode() % capacidad);
     }
 
-    /**
-     * Inserta o actualiza un valor asociado a una clave.
-     */
     @Override
     public void put(K clave, V valor) {
-        int indice = hash(clave);
-
-        if (buckets[indice] == null) {
-            buckets[indice] = new ListaSimple<>();
-        }
-
-        ListaSimple<Entry> lista = buckets[indice];
-
-        for (int i = 0; i < lista.tamanio(); i++) {
-            Entry entry = lista.obtener(i);
-            if (entry.clave.equals(clave)) {
-                entry.valor = valor;
+        int idx = hash(clave);
+        if (tabla[idx] == null) tabla[idx] = new LinkedList<>();
+        for (Entrada<K, V> e : tabla[idx]) {
+            if (e.clave.equals(clave)) {
+                e.valor = valor;
                 return;
             }
         }
-
-        lista.agregarFinal(new Entry(clave, valor));
+        tabla[idx].add(new Entrada<>(clave, valor));
         tamanio++;
+        if ((double) tamanio / capacidad > FACTOR_CARGA) rehash();
     }
 
-    /**
-     * Obtiene el valor asociado a una clave.
-     */
     @Override
     public V get(K clave) {
-        int indice = hash(clave);
-
-        ListaSimple<Entry> lista = buckets[indice];
-        if (lista == null)
-            throw new ElementoNoEncontradoException("Clave no encontrada");
-
-        for (int i = 0; i < lista.tamanio(); i++) {
-            Entry entry = lista.obtener(i);
-            if (entry.clave.equals(clave)) {
-                return entry.valor;
-            }
+        int idx = hash(clave);
+        if (tabla[idx] == null) return null;
+        for (Entrada<K, V> e : tabla[idx]) {
+            if (e.clave.equals(clave)) return e.valor;
         }
-
-        throw new ElementoNoEncontradoException("Clave no encontrada");
+        return null;
     }
 
-    /**
-     * Elimina un elemento por su clave.
-     */
+    /** Igual que get pero no lanza excepción si no existe. */
+    public V getSafe(K clave) {
+        return get(clave);
+    }
+
     @Override
-    public V remove(K clave) {
-        int indice = hash(clave);
-
-        ListaSimple<Entry> lista = buckets[indice];
-        if (lista == null)
-            throw new ElementoNoEncontradoException("Clave no encontrada");
-
-        for (int i = 0; i < lista.tamanio(); i++) {
-            Entry entry = lista.obtener(i);
-            if (entry.clave.equals(clave)) {
-                lista.eliminar(entry);
+    public boolean eliminar(K clave) {
+        int idx = hash(clave);
+        if (tabla[idx] == null) return false;
+        for (Entrada<K, V> e : tabla[idx]) {
+            if (e.clave.equals(clave)) {
+                tabla[idx].remove(e);
                 tamanio--;
-                return entry.valor;
-            }
-        }
-
-        throw new ElementoNoEncontradoException("Clave no encontrada");
-    }
-
-    /**
-     * Verifica si existe una clave.
-     */
-    @Override
-    public boolean contieneClave(K clave) {
-        int indice = hash(clave);
-
-        ListaSimple<Entry> lista = buckets[indice];
-        if (lista == null) return false;
-
-        for (int i = 0; i < lista.tamanio(); i++) {
-            if (lista.obtener(i).clave.equals(clave)) {
                 return true;
             }
         }
-
         return false;
     }
 
-    /**
-     * Retorna el tamanio de la tabla.
-     */
     @Override
-    public int tamanio() {
-        return tamanio;
+    public boolean contiene(K clave) {
+        return get(clave) != null;
     }
 
-    /**
-     * Verifica si esta vacia.
-     */
     @Override
-    public boolean estaVacia() {
-        return tamanio == 0;
+    public int tamanio() { return tamanio; }
+
+    @Override
+    public List<V> valores() {
+        List<V> result = new ArrayList<>();
+        for (LinkedList<Entrada<K, V>> bucket : tabla) {
+            if (bucket != null) {
+                for (Entrada<K, V> e : bucket) result.add(e.valor);
+            }
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void rehash() {
+        capacidad *= 2;
+        LinkedList<Entrada<K, V>>[] nueva = new LinkedList[capacidad];
+        for (LinkedList<Entrada<K, V>> bucket : tabla) {
+            if (bucket != null) {
+                for (Entrada<K, V> e : bucket) {
+                    int idx = Math.abs(e.clave.hashCode() % capacidad);
+                    if (nueva[idx] == null) nueva[idx] = new LinkedList<>();
+                    nueva[idx].add(e);
+                }
+            }
+        }
+        tabla = nueva;
+    }
+
+    private static class Entrada<K, V> {
+        K clave;
+        V valor;
+        Entrada(K c, V v) { this.clave = c; this.valor = v; }
     }
 }

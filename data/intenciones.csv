@@ -1,0 +1,4 @@
+id|clienteId|inmuebleCodigo|tipo|oferta|observaciones|estado|fecha
+INT-001|CLI-001|INM-001|COMPRA|2.7E8|Precio negociable|ACTIVA|2026-05-16 10:41
+INT-002|CLI-002|INM-002|ARRIENDO|1700000.0|Interesada en el barrio|ACTIVA|2026-05-16 10:41
+INT-003|CLI-003|INM-003|COMPRA|4.3E8|Inversión comercial|ACTIVA|2026-05-16 10:41

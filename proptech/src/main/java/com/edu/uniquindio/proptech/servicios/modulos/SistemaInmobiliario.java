@@ -1,294 +1,526 @@
 package com.edu.uniquindio.proptech.servicios.modulos;
 
-import com.edu.uniquindio.proptech.estructuras.cola.Cola;
-import com.edu.uniquindio.proptech.estructuras.cola.ColaLista;
-import com.edu.uniquindio.proptech.estructuras.colaPrioridad.ColaPrioridad;
-import com.edu.uniquindio.proptech.estructuras.colaPrioridad.ColaPrioridadLista;
-import com.edu.uniquindio.proptech.estructuras.lista.ListaSimple;
-import com.edu.uniquindio.proptech.estructuras.pila.Pila;
-import com.edu.uniquindio.proptech.estructuras.pila.PilaLista;
-import com.edu.uniquindio.proptech.estructuras.tablaHash.TablaHash;
-import com.edu.uniquindio.proptech.estructuras.tablaHash.TablaHashEncadenada;
-import com.edu.uniquindio.proptech.modelo.inmueble.Inmueble;
-import com.edu.uniquindio.proptech.modelo.operaciones.EstadoVisita;
-import com.edu.uniquindio.proptech.modelo.operaciones.Operacion;
-import com.edu.uniquindio.proptech.modelo.operaciones.Visita;
-import com.edu.uniquindio.proptech.modelo.usuario.Asesor;
-import com.edu.uniquindio.proptech.modelo.usuario.Cliente;
-import com.edu.uniquindio.proptech.servicios.interfaces.ISistemaInmobiliario;
-import com.edu.uniquindio.proptech.utils.alerta.Alerta;
+import com.edu.uniquindio.proptech.estructuras.*;
+import com.edu.uniquindio.proptech.estructuras.cola.*;
+import com.edu.uniquindio.proptech.estructuras.colaPrioridad.*;
+import com.edu.uniquindio.proptech.estructuras.lista.*;
+import com.edu.uniquindio.proptech.estructuras.pila.*;
+import com.edu.uniquindio.proptech.estructuras.tablaHash.*;
+import com.edu.uniquindio.proptech.modelo.inmueble.*;
+import com.edu.uniquindio.proptech.modelo.operaciones.*;
+import com.edu.uniquindio.proptech.modelo.usuario.*;
+import com.edu.uniquindio.proptech.utils.alerta.*;
+import com.edu.uniquindio.proptech.utils.alerta.Accion.TipoAccion;
 import com.edu.uniquindio.proptech.utils.excepciones.*;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.util.Comparator;
+import com.edu.uniquindio.proptech.modelo.operaciones.Intencion;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
- * Implementación principal del sistema inmobiliario PropTech.
- * <p>
- * Gestiona el registro y búsqueda de clientes, inmuebles y asesores,
- * el agendamiento y atención de visitas, la generación de alertas
- * prioritarias y el historial de acciones del sistema.
- * </p>
+ * Sistema central de gestión inmobiliaria PropTech.
  *
- * <p>Estructuras de datos utilizadas:</p>
- * <ul>
- *   <li>{@link TablaHash} — almacenamiento y búsqueda O(1) de entidades</li>
- *   <li>{@link Cola} — visitas pendientes (FIFO)</li>
- *   <li>{@link Pila} — historial de acciones (LIFO)</li>
- *   <li>{@link ColaPrioridad} — alertas ordenadas por prioridad</li>
- *   <li>{@link ListaSimple} — registro de operaciones</li>
- * </ul>
+ * Estructuras de datos utilizadas:
+ *  TablaHashEncadenada  → clientes, inmuebles, asesores    O(1) búsqueda
+ *  ColaLista<Visita>    → visitas pendientes               FIFO
+ *  PilaLista<Accion>    → historial de acciones            LIFO
+ *  ColaPrioridadLista   → alertas por urgencia             Mayor prioridad primero
+ *  ListaSimple          → operaciones, contratos, historial, registro general
+ *  Arbol<Double>        → BST de precios                   Búsqueda por rango
+ *  Grafo                → relaciones entre zonas            Análisis estructural
  *
- * @author PropTech
- * @version 1.0
+ * Autores: Sharif Giraldo Obando, Juan Sebastián Hernández, Santiago Ospina Sánchez
  */
-@Getter
-@Setter
-public class SistemaInmobiliario implements ISistemaInmobiliario {
+public class SistemaInmobiliario {
 
-    /** Tabla hash de clientes registrados, indexada por nombre. */
-    private TablaHashEncadenada<String, Cliente> clientes;
+    // ── Estructuras de datos ──────────────────────────────────────────────────
+    private final TablaHashEncadenada<String, Cliente>  clientes;
+    private final TablaHashEncadenada<String, Inmueble> inmuebles;
+    private final TablaHashEncadenada<String, Asesor>   asesores;
 
-    /** Tabla hash de inmuebles registrados, indexada por código. */
-    private TablaHashEncadenada<String, Inmueble> inmuebles;
+    private final ColaLista<Visita>          visitasPendientes;
+    private final PilaLista<Accion<?>>       historialAcciones;
+    private final ColaPrioridadLista<Alerta> alertas;
 
-    /** Tabla hash de asesores registrados, indexada por nombre. */
-    private TablaHashEncadenada<String, Asesor> asesores;
+    private final ListaSimple<Operacion> operaciones;
+    private final ListaSimple<Contrato>  contratos;
+    private final ListaSimple<Alerta>    alertasRegistro;
+    private final ListaSimple<Visita>    todasLasVisitas;
+    private final ListaSimple<Intencion> intenciones;
 
-    /** Cola FIFO de visitas pendientes por atender. */
-    private ColaLista<Visita> visitasPendientes;
+    // Listas auxiliares para iteración en la UI
+    private final ListaSimple<Inmueble> inmueblesLista;
+    private final ListaSimple<Cliente>  clientesLista;
+    private final ListaSimple<Asesor>   asesoresLista;
 
-    /** Pila LIFO con el historial de acciones realizadas en el sistema. */
-    private PilaLista<String> historialAcciones;
+    private final Arbol<Double> bstPrecios;
+    private final Grafo         grafoZonas;
 
-    /** Cola de prioridad para alertas del sistema, ordenadas por urgencia. */
-    private ColaPrioridadLista<Alerta> alertas;
+    private int contadorId = 1;
 
-    /** Lista de todas las operaciones (ventas/arriendos) registradas. */
-    private ListaSimple<Operacion> operaciones;
-
-    /**
-     * Constructor que inicializa todas las estructuras de datos del sistema.
-     */
     public SistemaInmobiliario() {
-        clientes          = new TablaHashEncadenada<>(50);
-        inmuebles         = new TablaHashEncadenada<>(50);
-        asesores          = new TablaHashEncadenada<>(20);
-        visitasPendientes = new ColaLista<>();
-        historialAcciones = new PilaLista<>();
-        alertas           = new ColaPrioridadLista<>(Comparator.comparing(Alerta::getNivel));
-        operaciones       = new ListaSimple<>();
+        this.clientes   = new TablaHashEncadenada<>();
+        this.inmuebles  = new TablaHashEncadenada<>();
+        this.asesores   = new TablaHashEncadenada<>();
+        this.visitasPendientes = new ColaLista<>();
+        this.historialAcciones = new PilaLista<>();
+        this.alertas    = new ColaPrioridadLista<>(Comparator.comparingInt(Alerta::getPrioridadNumerica).reversed());
+        this.operaciones = new ListaSimple<>();
+        this.contratos   = new ListaSimple<>();
+        this.alertasRegistro = new ListaSimple<>();
+        this.todasLasVisitas = new ListaSimple<>();
+        this.intenciones     = new ListaSimple<>();
+        this.inmueblesLista  = new ListaSimple<>();
+        this.clientesLista   = new ListaSimple<>();
+        this.asesoresLista   = new ListaSimple<>();
+        this.bstPrecios = new Arbol<>();
+        this.grafoZonas = new Grafo();
     }
 
-    // =========================================================
-    //  CLIENTES
-    // =========================================================
+    // ── Getters de estructuras ────────────────────────────────────────────────
+    public TablaHashEncadenada<String, Cliente>  getClientes()          { return clientes; }
+    public TablaHashEncadenada<String, Inmueble> getInmuebles()         { return inmuebles; }
+    public TablaHashEncadenada<String, Asesor>   getAsesores()          { return asesores; }
+    public ColaLista<Visita>                     getVisitasPendientes() { return visitasPendientes; }
+    public PilaLista<Accion<?>>                  getHistorialAcciones() { return historialAcciones; }
+    public ColaPrioridadLista<Alerta>            getAlertas()           { return alertas; }
+    public ListaSimple<Operacion>                getOperaciones()       { return operaciones; }
+    public ListaSimple<Contrato>                 getContratos()         { return contratos; }
+    public ListaSimple<Alerta>                   getAlertasRegistro()   { return alertasRegistro; }
+    public ListaSimple<Visita>                   getTodasLasVisitas()   { return todasLasVisitas; }
+    public ListaSimple<Intencion>                getIntenciones()       { return intenciones; }
+    public ListaSimple<Inmueble>                 getInmueblesLista()    { return inmueblesLista; }
+    public ListaSimple<Cliente>                  getClientesLista()     { return clientesLista; }
+    public ListaSimple<Asesor>                   getAsesoresLista()     { return asesoresLista; }
+    public Arbol<Double>                         getBstPrecios()        { return bstPrecios; }
+    public Grafo                                 getGrafoZonas()        { return grafoZonas; }
 
-    /**
-     * Registra un nuevo cliente en el sistema.
-     *
-     * @param cliente el cliente a registrar; no puede ser {@code null}
-     * @throws ParametroVacioException      si {@code cliente} es {@code null}
-     * @throws ClienteYaRegistradoException si ya existe un cliente con el mismo nombre
-     */
-    @Override
+    public String generarId(String prefijo) {
+        return prefijo + String.format("%04d", contadorId++);
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // CLIENTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void registrarCliente(Cliente cliente) {
-        if (cliente == null) {
-            throw new ParametroVacioException("El cliente no puede ser nulo.");
-        }
-        if (clientes.get(cliente.getNombre()) != null) {
-            throw new ClienteYaRegistradoException(
-                    "El cliente '" + cliente.getNombre() + "' ya está registrado.");
-        }
-        clientes.put(cliente.getNombre(), cliente);
-        historialAcciones.push("Registro de cliente: " + cliente.getNombre());
+        if (cliente == null) throw new ParametroVacioException("El cliente no puede ser nulo");
+        clientes.put(cliente.getId(), cliente);
+        clientesLista.agregarFinal(cliente);
+        historialAcciones.push(new Accion<>(TipoAccion.CREACION_CLIENTE,
+                null, cliente, "Cliente registrado: " + cliente.getNombre()));
     }
 
-    /**
-     * Busca y retorna un cliente por su identificador.
-     *
-     * @param id identificador (nombre) del cliente; no puede ser {@code null} ni vacío
-     * @return el {@link Cliente} encontrado
-     * @throws ParametroVacioException     si {@code id} es {@code null} o vacío
-     * @throws ElementoNoEncontradoException si no existe un cliente con ese id
-     */
-    @Override
     public Cliente buscarCliente(String id) {
-        if (id == null || id.isEmpty()) {
-            throw new ParametroVacioException("El id del cliente no puede ser nulo o vacío.");
-        }
-        Cliente cliente = clientes.get(id);
-        if (cliente == null) {
-            throw new ElementoNoEncontradoException(
-                    "No se encontró ningún cliente con el id: " + id);
-        }
-        return cliente;
+        if (id == null || id.isBlank()) return null;
+        return clientes.getSafe(id);
     }
 
-    // =========================================================
-    //  INMUEBLES
-    // =========================================================
+    public void eliminarCliente(String id) {
+        Cliente c = clientes.getSafe(id);
+        if (c == null) throw new ElementoNoEncontradoException("Cliente no encontrado: " + id);
+        clientes.eliminar(id);
+        clientesLista.eliminar(c);
+    }
 
-    /**
-     * Registra un nuevo inmueble en el sistema.
-     *
-     * @param inmueble el inmueble a registrar; no puede ser {@code null}
-     * @throws ParametroVacioException si {@code inmueble} es {@code null}
-     * @throws ClienteYaRegistradoException si ya existe un inmueble con el mismo código
-     */
-    @Override
+    // ═════════════════════════════════════════════════════════════════════════
+    // INMUEBLES
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void registrarInmueble(Inmueble inmueble) {
-        if (inmueble == null) {
-            throw new ParametroVacioException("El inmueble no puede ser nulo.");
-        }
-        if (inmuebles.get(inmueble.getCodigo()) != null) {
-            throw new ClienteYaRegistradoException(
-                    "El inmueble con código '" + inmueble.getCodigo() + "' ya está registrado.");
-        }
+        if (inmueble == null) throw new ParametroVacioException("El inmueble no puede ser nulo");
         inmuebles.put(inmueble.getCodigo(), inmueble);
-        historialAcciones.push("Registro de inmueble: " + inmueble.getCodigo());
+        inmueblesLista.agregarFinal(inmueble);
+        bstPrecios.insertar(inmueble.getPrecio());
+        grafoZonas.agregarNodo(inmueble.getZona());
+        historialAcciones.push(new Accion<>(TipoAccion.CREACION_INMUEBLE,
+                null, inmueble, "Inmueble registrado: " + inmueble.getCodigo()));
     }
 
-    /**
-     * Busca y retorna un inmueble por su código.
-     *
-     * @param codigo código único del inmueble; no puede ser {@code null} ni vacío
-     * @return el {@link Inmueble} encontrado
-     * @throws ParametroVacioException       si {@code codigo} es {@code null} o vacío
-     * @throws ElementoNoEncontradoException si no existe un inmueble con ese código
-     */
-    @Override
     public Inmueble buscarInmueble(String codigo) {
-        if (codigo == null || codigo.isEmpty()) {
-            throw new ParametroVacioException("El código del inmueble no puede ser nulo o vacío.");
-        }
-        Inmueble inmueble = inmuebles.get(codigo);
-        if (inmueble == null) {
-            throw new ElementoNoEncontradoException(
-                    "No se encontró ningún inmueble con el código: " + codigo);
-        }
-        return inmueble;
+        if (codigo == null || codigo.isBlank()) return null;
+        return inmuebles.getSafe(codigo);
     }
 
-    // =========================================================
-    //  ASESORES
-    // =========================================================
+    public void eliminarInmueble(String codigo) {
+        Inmueble inm = inmuebles.getSafe(codigo);
+        if (inm == null) throw new ElementoNoEncontradoException("Inmueble no encontrado: " + codigo);
+        inmuebles.eliminar(codigo);
+        inmueblesLista.eliminar(inm);
+        bstPrecios.eliminar(inm.getPrecio());
+        historialAcciones.push(new Accion<>(TipoAccion.ELIMINAR_INMUEBLE,
+                inm, null, "Inmueble eliminado: " + codigo));
+    }
 
-    /**
-     * Registra un nuevo asesor en el sistema.
-     *
-     * @param asesor el asesor a registrar; no puede ser {@code null}
-     * @throws ParametroVacioException      si {@code asesor} es {@code null}
-     * @throws ClienteYaRegistradoException si ya existe un asesor con el mismo nombre
-     */
-    @Override
+    public void cambiarEstadoInmueble(String codigo, EstadoInmueble nuevoEstado) {
+        Inmueble inm = buscarInmueble(codigo);
+        if (inm == null) throw new ElementoNoEncontradoException("Inmueble no encontrado: " + codigo);
+        EstadoInmueble anterior = inm.getEstado();
+        inm.setEstado(nuevoEstado);
+        historialAcciones.push(new Accion<>(TipoAccion.CAMBIO_ESTADO,
+                anterior, nuevoEstado, codigo + ": " + anterior + " → " + nuevoEstado));
+    }
+
+    public void actualizarPrecioInmueble(String codigo, double nuevoPrecio) {
+        Inmueble inm = buscarInmueble(codigo);
+        if (inm == null) throw new ElementoNoEncontradoException("Inmueble no encontrado: " + codigo);
+        double anterior = inm.getPrecio();
+        bstPrecios.eliminar(anterior);
+        inm.setPrecio(nuevoPrecio);
+        bstPrecios.insertar(nuevoPrecio);
+        historialAcciones.push(new Accion<>(TipoAccion.EDICION_INMUEBLE,
+                anterior, nuevoPrecio, "Precio actualizado: " + codigo));
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // ASESORES
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void registrarAsesor(Asesor asesor) {
-        if (asesor == null) {
-            throw new ParametroVacioException("El asesor no puede ser nulo.");
-        }
-        if (asesores.get(asesor.getNombre()) != null) {
-            throw new ClienteYaRegistradoException(
-                    "El asesor '" + asesor.getNombre() + "' ya está registrado.");
-        }
-        asesores.put(asesor.getNombre(), asesor);
-        historialAcciones.push("Registro de asesor: " + asesor.getNombre());
+        if (asesor == null) throw new ParametroVacioException("El asesor no puede ser nulo");
+        asesores.put(asesor.getId(), asesor);
+        asesoresLista.agregarFinal(asesor);
+        grafoZonas.agregarNodo(asesor.getZonaAsignada());
+        historialAcciones.push(new Accion<>(TipoAccion.CREACION_ASESOR,
+                null, asesor, "Asesor registrado: " + asesor.getNombre()));
     }
 
-    // =========================================================
-    //  VISITAS
-    // =========================================================
+    public Asesor buscarAsesor(String id) {
+        if (id == null || id.isBlank()) return null;
+        return asesores.getSafe(id);
+    }
 
-    /**
-     * Agenda una visita encólándola en la cola de visitas pendientes.
-     *
-     * @param visita la visita a agendar; no puede ser {@code null}
-     * @throws ParametroVacioException si {@code visita} es {@code null}
-     * @throws VisitaInvalidaException si la visita no tiene cliente o inmueble asignado
-     */
-    @Override
+    public void asignarInmuebleAsesor(String asesorId, String inmuebleCodigo) {
+        Asesor   asesor  = buscarAsesor(asesorId);
+        Inmueble inmueble = buscarInmueble(inmuebleCodigo);
+        if (asesor   == null) throw new ElementoNoEncontradoException("Asesor no encontrado: " + asesorId);
+        if (inmueble == null) throw new ElementoNoEncontradoException("Inmueble no encontrado: " + inmuebleCodigo);
+        if (!asesor.getInmueblesAsignados().contiene(inmueble)) {
+            asesor.getInmueblesAsignados().agregarFinal(inmueble);
+        }
+        inmueble.setAsesor(asesor);
+        if (inmueble.getZona() != null && !inmueble.getZona().equals(asesor.getZonaAsignada())) {
+            grafoZonas.agregarArista(asesor.getZonaAsignada(), inmueble.getZona());
+        }
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // VISITAS — ColaLista<Visita> FIFO
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void agendarVisita(Visita visita) {
-        if (visita == null) {
-            throw new ParametroVacioException("La visita no puede ser nula.");
-        }
-        if (visita.getCliente() == null || visita.getInmueble() == null) {
-            throw new VisitaInvalidaException(
-                    "La visita debe tener un cliente y un inmueble asignados.");
-        }
+        if (visita == null) throw new ParametroVacioException("La visita no puede ser nula");
         visitasPendientes.encolar(visita);
-        historialAcciones.push("Visita agendada para: " + visita.getCliente().getNombre());
+        todasLasVisitas.agregarFinal(visita);
+        if (visita.getAsesor() != null)
+            visita.getAsesor().getVisitasAtendidas().agregarFinal(visita);
+        if (visita.getCliente() != null)
+            visita.getCliente().registrarVisita(visita);
+        if (visita.getInmueble() != null)
+            visita.getInmueble().setVisitas(visita.getInmueble().getVisitas() + 1);
+        historialAcciones.push(new Accion<>(TipoAccion.AGENDAR_VISITA, null, visita,
+                "Visita agendada: " +
+                (visita.getCliente() != null ? visita.getCliente().getNombre() : "?") +
+                " → " + (visita.getInmueble() != null ? visita.getInmueble().getCodigo() : "?")));
     }
 
-    /**
-     * Atiende la siguiente visita pendiente en la cola.
-     * <p>
-     * Extrae la primera visita de la cola y la marca como {@link EstadoVisita#REALIZADA}.
-     * </p>
-     *
-     * @param visita la visita a marcar como realizada; no puede ser {@code null}
-     * @throws ParametroVacioException si {@code visita} es {@code null}
-     * @throws ListaVaciaException     si no hay visitas pendientes en la cola
-     */
-    @Override
-    public void atenderVisita(Visita visita) {
-        if (visita == null) {
-            throw new ParametroVacioException("La visita no puede ser nula.");
-        }
-        if (visitasPendientes.estaVacia()) {
-            throw new ListaVaciaException("No hay visitas pendientes por atender.");
-        }
-        Visita siguiente = visitasPendientes.desencolar();
-        siguiente.setEstado(EstadoVisita.REALIZADA);
-        historialAcciones.push("Visita atendida: " + siguiente.getCliente().getNombre());
+    public Visita atenderVisita() {
+        if (visitasPendientes.estaVacia()) return null;
+        Visita v = visitasPendientes.desencolar();
+        v.setEstado(EstadoVisita.REALIZADA);
+        return v;
     }
 
-    // =========================================================
-    //  ALERTAS
-    // =========================================================
+    // ═════════════════════════════════════════════════════════════════════════
+    // OPERACIONES
+    // ═════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Genera y encola una nueva alerta en la cola de prioridad.
-     *
-     * @param alerta la alerta a registrar; no puede ser {@code null}
-     * @throws ParametroVacioException si {@code alerta} es {@code null}
-     */
-    @Override
+    public void registrarOperacion(Operacion op) {
+        if (op == null) throw new ParametroVacioException("Operación nula");
+        operaciones.agregarFinal(op);
+        if (op.getAsesor() != null) op.getAsesor().incrementarCierres();
+        historialAcciones.push(new Accion<>(TipoAccion.REGISTRO_OPERACION, null, op,
+                "Operación registrada: " + op.getId()));
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // CONTRATOS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void registrarContrato(Contrato contrato) {
+        if (contrato == null) throw new ParametroVacioException("Contrato nulo");
+        contratos.agregarFinal(contrato);
+        historialAcciones.push(new Accion<>(TipoAccion.REGISTRO_CONTRATO, null, contrato,
+                "Contrato registrado: " + contrato.getId()));
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // ALERTAS — ColaPrioridadLista<Alerta>
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void generarAlerta(Alerta alerta) {
-        if (alerta == null) {
-            throw new ParametroVacioException("La alerta no puede ser nula.");
-        }
-        alertas.encolar(alerta);
-        historialAcciones.push("Alerta generada.");
+        alertas.insertar(alerta);
+        alertasRegistro.agregarFinal(alerta);
     }
 
-    /**
-     * Retorna y elimina la alerta de mayor prioridad en el sistema.
-     *
-     * @return la {@link Alerta} más prioritaria
-     * @throws ListaVaciaException si no hay alertas registradas
-     */
-    @Override
     public Alerta obtenerAlertaPrioritaria() {
-        if (alertas.estaVacia()) {
-            throw new ListaVaciaException("No hay alertas registradas en el sistema.");
-        }
-        return alertas.desencolar();
+        return alertas.extraerMaximo();
     }
 
-    // =========================================================
-    //  HISTORIAL
-    // =========================================================
 
-    /**
-     * Retorna y elimina la última acción registrada en el historial.
-     *
-     * @return {@code String} con la descripción de la última acción
-     * @throws ListaVaciaException si el historial está vacío
-     */
-    public String deshacerUltimaAccion() {
-        if (historialAcciones.estaVacia()) {
-            throw new ListaVaciaException("El historial de acciones está vacío.");
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // INTENCIONES DE COMPRA/ARRIENDO (req. 4.5 PDF)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void registrarIntencion(Intencion intencion) {
+        if (intencion == null) throw new ParametroVacioException("Intención nula");
+        intenciones.agregarFinal(intencion);
+        // Registrar en historial del cliente
+        if (intencion.getCliente() != null && intencion.getInmueble() != null) {
+            intencion.getCliente().registrarConsulta(intencion.getInmueble());
         }
-        return historialAcciones.pop();
+        historialAcciones.push(new Accion<>(TipoAccion.CREACION_CLIENTE,
+                null, intencion, "Intención registrada: " + intencion.getId()));
+    }
+
+    public ListaSimple<Intencion> getIntencionesPorCliente(String clienteId) {
+        ListaSimple<Intencion> resultado = new ListaSimple<>();
+        for (int i = 0; i < intenciones.tamanio(); i++) {
+            Intencion inten = intenciones.obtener(i);
+            if (inten.getCliente() != null && inten.getCliente().getId().equals(clienteId)) {
+                resultado.agregarFinal(inten);
+            }
+        }
+        return resultado;
+    }
+
+    /** Clientes con alta probabilidad de cierre (intenciones activas + presupuesto alto) */
+    public ListaSimple<Cliente> clientesAltaProbabilidadCierre() {
+        ListaSimple<Cliente> resultado = new ListaSimple<>();
+        for (int i = 0; i < clientesLista.tamanio(); i++) {
+            Cliente c = clientesLista.obtener(i);
+            boolean tieneIntencion = false;
+            for (int j = 0; j < intenciones.tamanio(); j++) {
+                Intencion inten = intenciones.obtener(j);
+                if (inten.getCliente() != null && inten.getCliente().getId().equals(c.getId())
+                        && inten.getEstado() == Intencion.EstadoIntencion.ACTIVA) {
+                    tieneIntencion = true; break;
+                }
+            }
+            if (tieneIntencion) resultado.agregarFinal(c);
+        }
+        return resultado;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // EDICIÓN DE INMUEBLE (req. 6.1 PDF)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void editarInmueble(String codigo, String direccion, String zona,
+                                double precio, double area, int habitaciones,
+                                int banios, String finalidad) {
+        Inmueble inm = buscarInmueble(codigo);
+        if (inm == null) throw new ElementoNoEncontradoException("Inmueble no encontrado: " + codigo);
+        if (direccion != null && !direccion.isBlank()) inm.setDireccion(direccion);
+        if (zona      != null && !zona.isBlank())      inm.setZona(zona);
+        if (precio    > 0) actualizarPrecioInmueble(codigo, precio);
+        if (area      > 0) inm.setArea(area);
+        if (habitaciones >= 0) inm.setHabitaciones(habitaciones);
+        if (banios    >= 0) inm.setBanios(banios);
+        if (finalidad != null && !finalidad.isBlank()) inm.setFinalidad(finalidad);
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // EDICIÓN DE CLIENTE (req. 6.2 PDF)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void editarCliente(String id, String nombre, String telefono,
+                               double presupuesto, String zonasInteres) {
+        Cliente c = buscarCliente(id);
+        if (c == null) throw new ElementoNoEncontradoException("Cliente no encontrado: " + id);
+        if (nombre      != null && !nombre.isBlank())      c.setNombre(nombre);
+        if (telefono    != null && !telefono.isBlank())    c.setTelefono(telefono);
+        if (presupuesto  > 0)                              c.setPresupuesto(presupuesto);
+        if (zonasInteres != null && !zonasInteres.isBlank()) c.setZonasInteres(zonasInteres);
+        historialAcciones.push(new Accion<>(TipoAccion.CREACION_CLIENTE,
+                null, c, "Cliente editado: " + c.getNombre()));
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // RANKING DE INMUEBLES POR DEMANDA (req. 8 PDF)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public ListaSimple<Inmueble> rankingInmueblesPorDemanda() {
+        java.util.List<Inmueble> lista = inmueblesLista.toJavaList();
+        lista.sort((a, b) -> Integer.compare(b.getVisitas(), a.getVisitas()));
+        ListaSimple<Inmueble> resultado = new ListaSimple<>();
+        for (Inmueble i : lista) resultado.agregarFinal(i);
+        return resultado;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // CONTRATOS PRÓXIMOS A VENCER (req. 4.7 PDF)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public ListaSimple<Contrato> contratosProximosVencer(int diasLimite) {
+        ListaSimple<Contrato> resultado = new ListaSimple<>();
+        LocalDate hoy = LocalDate.now();
+        for (int i = 0; i < contratos.tamanio(); i++) {
+            Contrato c = contratos.obtener(i);
+            if (c.getFechaFin() != null && c.getEstado() == Contrato.EstadoContrato.ACTIVO) {
+                long dias = java.time.temporal.ChronoUnit.DAYS.between(hoy, c.getFechaFin());
+                if (dias >= 0 && dias <= diasLimite) resultado.agregarFinal(c);
+            }
+        }
+        return resultado;
+    }
+
+    /** Detecta automáticamente comportamientos inusuales y genera alertas (req. 4.9). */
+    public void detectarComportamientoInusual() {
+        // 1. Inmuebles con demasiadas visitas sin cierre
+        for (int i = 0; i < inmueblesLista.tamanio(); i++) {
+            Inmueble inm = inmueblesLista.obtener(i);
+            if (inm.getVisitas() >= 5 && inm.getEstado() == EstadoInmueble.DISPONIBLE) {
+                generarAlerta(new Alerta("ALT-V-" + inm.getCodigo(),
+                        "Inmueble " + inm.getCodigo() + " tiene " + inm.getVisitas() + " visitas sin cierre",
+                        Alerta.NivelAlerta.ALTA, "VISITAS_SIN_CIERRE"));
+            }
+        }
+        // 2. Asesores con sobrecarga
+        for (int i = 0; i < asesoresLista.tamanio(); i++) {
+            Asesor a = asesoresLista.obtener(i);
+            if (a.getVisitasAtendidas().tamanio() >= 6) {
+                generarAlerta(new Alerta("ALT-A-" + a.getId(),
+                        "Asesor " + a.getNombre() + " tiene sobrecarga (" + a.getVisitasAtendidas().tamanio() + " visitas)",
+                        Alerta.NivelAlerta.MEDIA, "SOBRECARGA_ASESOR"));
+            }
+        }
+        // 3. Contratos próximos a vencer (60 días)
+        ListaSimple<Contrato> prox = contratosProximosVencer(60);
+        for (int i = 0; i < prox.tamanio(); i++) {
+            Contrato ct = prox.obtener(i);
+            generarAlerta(new Alerta("ALT-CT-" + ct.getId(),
+                    "Contrato " + ct.getId() + " vence en menos de 60 días",
+                    Alerta.NivelAlerta.ALTA, "CONTRATO_PRONTO_VENCER"));
+        }
+        // 4. Inmuebles reservados sin cierre por más de 30 días (simulado)
+        for (int i = 0; i < inmueblesLista.tamanio(); i++) {
+            Inmueble inm = inmueblesLista.obtener(i);
+            if (inm.getEstado() == EstadoInmueble.RESERVADO) {
+                generarAlerta(new Alerta("ALT-R-" + inm.getCodigo(),
+                        "Inmueble " + inm.getCodigo() + " lleva tiempo RESERVADO sin cierre",
+                        Alerta.NivelAlerta.MEDIA, "RESERVADO_SIN_CIERRE"));
+            }
+        }
+        // 5. Clientes sin seguimiento
+        for (int i = 0; i < clientesLista.tamanio(); i++) {
+            Cliente c = clientesLista.obtener(i);
+            if (c.getHistorialVisitas().estaVacia() && c.getEstadoBusqueda() == Cliente.EstadoBusqueda.BUSCANDO) {
+                generarAlerta(new Alerta("ALT-C-" + c.getId(),
+                        "Cliente " + c.getNombre() + " sin visitas ni seguimiento",
+                        Alerta.NivelAlerta.BAJA, "CLIENTE_SIN_SEGUIMIENTO"));
+            }
+        }
+    }
+
+
+
+    public ListaSimple<Inmueble> recomendarInmuebles(Cliente cliente) {
+        if (cliente == null) return new ListaSimple<>();
+        ListaSimple<Inmueble> recomendaciones = new ListaSimple<>();
+        for (int i = 0; i < inmueblesLista.tamanio(); i++) {
+            Inmueble inm = inmueblesLista.obtener(i);
+            if (inm.getEstado() != EstadoInmueble.DISPONIBLE) continue;
+            boolean precioOk = inm.getPrecio() <= cliente.getPresupuesto();
+            boolean tipoOk   = cliente.getTipoDeseado() == null || inm.getTipo() == cliente.getTipoDeseado();
+            boolean habOk    = inm.getHabitaciones() >= cliente.getMinHabitaciones();
+            boolean zonaOk   = cliente.getZonasInteres() == null || cliente.getZonasInteres().isBlank()
+                    || cliente.getZonasInteres().toLowerCase().contains(inm.getZona().toLowerCase());
+            if (precioOk && tipoOk && habOk) {
+                recomendaciones.agregarFinal(inm);
+            }
+        }
+        return recomendaciones;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // FILTRO MULTI-CRITERIO
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public ListaSimple<Inmueble> filtrarInmuebles(TipoInmueble tipo, String finalidad,
+                                                   double precioMin, double precioMax,
+                                                   int minHabitaciones) {
+        ListaSimple<Inmueble> resultado = new ListaSimple<>();
+        for (int i = 0; i < inmueblesLista.tamanio(); i++) {
+            Inmueble inm = inmueblesLista.obtener(i);
+            if (tipo != null && inm.getTipo() != tipo) continue;
+            if (finalidad != null && !finalidad.isBlank()
+                    && !inm.getFinalidad().equalsIgnoreCase(finalidad)) continue;
+            if (precioMin > 0 && inm.getPrecio() < precioMin) continue;
+            if (precioMax > 0 && inm.getPrecio() > precioMax) continue;
+            if (minHabitaciones > 0 && inm.getHabitaciones() < minHabitaciones) continue;
+            resultado.agregarFinal(inm);
+        }
+        return resultado;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // RANKING
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Ranking de zonas por número de inmuebles. */
+    public Map<String, Integer> rankingZonas() {
+        Map<String, Integer> conteo = new LinkedHashMap<>();
+        for (int i = 0; i < inmueblesLista.tamanio(); i++) {
+            String zona = inmueblesLista.obtener(i).getZona();
+            if (zona != null) conteo.merge(zona, 1, Integer::sum);
+        }
+        // Ordenar por valor descendente
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(conteo.entrySet());
+        entries.sort((a, b) -> b.getValue() - a.getValue());
+        Map<String, Integer> ordenado = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> e : entries) ordenado.put(e.getKey(), e.getValue());
+        return ordenado;
+    }
+
+    /** Ranking de asesores por efectividad. */
+    public ListaSimple<Asesor> rankingAsesores() {
+        // Copia y ordena por efectividad descendente
+        java.util.List<Asesor> lista = asesoresLista.toJavaList();
+        lista.sort((a, b) -> Double.compare(b.getEfectividad(), a.getEfectividad()));
+        ListaSimple<Asesor> resultado = new ListaSimple<>();
+        for (Asesor a : lista) resultado.agregarFinal(a);
+        return resultado;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // FAVORITOS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void toggleFavorito(String clienteId, String inmuebleCodigo) {
+        Cliente c = buscarCliente(clienteId);
+        Inmueble inm = buscarInmueble(inmuebleCodigo);
+        if (c == null || inm == null) return;
+        if (c.getFavoritos().contiene(inm)) c.quitarFavorito(inm);
+        else c.agregarFavorito(inm);
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // DESHACER (PILA)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public String deshacerUltimaAccion() {
+        if (historialAcciones.estaVacia()) return "No hay acciones para deshacer";
+        Accion<?> accion = historialAcciones.pop();
+        return "Deshecho: " + accion.getDescripcion();
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // CONEXIÓN DE ZONAS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    public void conectarZonas(String zona1, String zona2, int distancia) {
+        grafoZonas.agregarArista(zona1, zona2, distancia);
     }
 }

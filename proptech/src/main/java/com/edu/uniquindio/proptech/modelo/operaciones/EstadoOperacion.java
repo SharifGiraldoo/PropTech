@@ -1,8 +1,3 @@
 package com.edu.uniquindio.proptech.modelo.operaciones;
 
-public enum EstadoOperacion {
-    NOINICIADA,
-    ENPROCESO,
-    PENDIENTE,
-    FINALIZADA
-}
+public enum EstadoOperacion { ACTIVA, CERRADA, CANCELADA, RENOVADA }

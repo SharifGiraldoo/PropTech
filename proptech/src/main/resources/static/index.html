@@ -1,0 +1,2768 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PropTech — Plataforma Inmobiliaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f4ede1;--s1:#fbf7ee;--s2:#efe6d4;--s3:#e6dbc4;--bd:#d9ccb0;--bd2:#c4b48f;--ink:#1f2a24;--green:#1f3a2e;--green2:#2c5444;--gs:#e3ebe2;--terra:#b8593a;--terra2:#d77051;--ts:#f3dccf;--brass:#9c7a3c;--bs2:#ebdfba;--text:#1f2a24;--t2:#5a6b62;--t3:#8c9a8e;--ok:#3f7a51;--warn:#b8893a;--err:#b34b3a;--info:#3a6b8a;--r:14px;--sh:0 4px 16px -4px rgba(31,42,36,.08);--shl:0 24px 48px -16px rgba(31,42,36,.18),0 6px 16px rgba(31,42,36,.06);--shs:0 1px 3px rgba(31,42,36,.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh}
+body{font-family:"Manrope",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(184,89,58,.04),transparent 45%),radial-gradient(circle at 80% 90%,rgba(31,58,46,.04),transparent 50%)}
+.app{display:none;min-height:100vh;position:relative;z-index:1}
+.sb{width:258px;flex-shrink:0;background:var(--green);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;background-image:linear-gradient(180deg,rgba(255,255,255,.02),transparent 30%),radial-gradient(circle at 100% 0%,rgba(184,89,58,.18),transparent 60%)}
+.logo{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.lgr{display:flex;align-items:center;gap:10px}
+.lgmk{width:32px;height:32px;border-radius:9px;background:var(--terra);display:grid;place-items:center;color:#fbf7ee;box-shadow:0 4px 12px rgba(184,89,58,.35)}
+.lgmk svg{stroke:#fbf7ee}
+.lgt{font-family:"DM Serif Display",serif;font-size:22px;color:#fbf7ee;line-height:1}
+.lgs{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#a39775;margin-top:4px;font-weight:600}
+.rbd{margin:10px 18px 0;padding:6px 12px;border-radius:8px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.ra{background:rgba(184,89,58,.22);color:#e8b48f}
+.rc{background:rgba(63,122,81,.22);color:#a3c5a8}
+.re{background:rgba(58,107,138,.22);color:#9bbfd1}
+.nav{padding:14px 10px;flex:1}
+.ns{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#7a8c7d;padding:16px 12px 6px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ns::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.06)}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;color:#c9bea1;font-size:13px;font-weight:500;transition:all .14s;margin-bottom:2px;position:relative}
+.ni svg{width:15px;height:15px;flex-shrink:0;stroke-width:1.7;fill:none;stroke:currentColor}
+.ni:hover{background:rgba(255,255,255,.06);color:#fbf7ee}
+.ni.on{background:rgba(184,89,58,.18);color:#fbf7ee}
+.ni.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2.5px;background:var(--terra2);border-radius:2px}
+.sf{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:#7a8c7d;line-height:1.7}
+.mn{margin-left:258px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.tb{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shs)}
+.tbw{display:flex;flex-direction:column}
+.tbey{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);font-weight:700}
+.tbt{font-family:"DM Serif Display",serif;font-size:18px;color:var(--ink)}
+.tbr{display:flex;align-items:center;gap:12px}
+.sbx{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:7px 13px}
+.sbx svg{width:15px;height:15px;stroke:var(--t3);stroke-width:2;fill:none;flex-shrink:0}
+.sbx input{border:none;background:none;outline:none;font:500 13px "Manrope",sans-serif;color:var(--text);width:160px}
+.sbx input::placeholder{color:var(--t3)}
+.up{font-weight:700;font-size:13px;color:var(--ink);cursor:pointer;padding:7px 12px;border-radius:9px;background:var(--s2);border:1px solid var(--bd);transition:background .15s}
+.up:hover{background:var(--s3)}
+.ct{flex:1;padding:28px;overflow-y:auto}
+.pg2{display:none}
+.pg2.on{display:block}
+.mt{margin-top:16px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:13px;margin-bottom:22px}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;box-shadow:var(--shs);transition:transform .2s,box-shadow .2s;cursor:default}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.sc::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px}
+.c1::before{background:var(--green)}.c2::before{background:var(--terra)}.c3::before{background:var(--brass)}.c4::before{background:var(--green2)}.c5::before{background:var(--terra2)}.c6::before{background:var(--ink)}
+.sv{font-family:"DM Serif Display",serif;font-size:36px;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.sl{font-size:12px;color:var(--t2);margin-top:5px;font-weight:500}
+.crd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shs)}
+.ch{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(180deg,var(--s1),rgba(239,230,212,.4))}
+.ctt{font-family:"DM Serif Display",serif;font-size:17px;color:var(--ink)}
+.cb{padding:18px 20px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:11px 15px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);border-bottom:1px solid var(--bd);font-weight:700;background:rgba(239,230,212,.35)}
+td{padding:11px 15px;font-size:13px;border-bottom:1px solid var(--bd);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(239,230,212,.3)}
+.mono{font-family:"JetBrains Mono",monospace;font-size:12px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:1.5px solid transparent;font:600 13px "Manrope",sans-serif;cursor:pointer;transition:all .15s;outline:none}
+.bg2{background:var(--green);color:#fff;border-color:var(--green)}.bg2:hover{background:var(--green2)}
+.be2{background:transparent;color:var(--err);border-color:rgba(179,75,58,.3)}.be2:hover{background:rgba(179,75,58,.08)}
+.bs2{background:var(--s2);color:var(--text);border-color:var(--bd)}.bs2:hover{background:var(--s3)}
+.bsm{padding:7px 13px;font-size:12px}
+.bxs{padding:5px 10px;font-size:11px;border-radius:7px}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:.04em}
+.bk{background:var(--s3);color:var(--t2)}
+.bo{background:rgba(63,122,81,.12);color:var(--ok)}
+.bt{background:rgba(184,89,58,.12);color:var(--terra)}
+.bi{background:rgba(58,107,138,.12);color:var(--info)}
+.bw{background:rgba(184,137,58,.12);color:var(--warn)}
+.br{background:rgba(179,75,58,.12);color:var(--err)}
+.bp{background:rgba(120,80,160,.12);color:#7850a0}
+.br{background:rgba(179,75,58,.12);color:var(--err)}
+.bi{background:rgba(58,107,138,.12);color:var(--info)}
+.bw{background:rgba(184,137,58,.12);color:var(--warn)}
+.emp{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;gap:6px}
+.ei{font-size:28px;opacity:.5}
+.et{font-size:13px;color:var(--t3);font-weight:500}
+.hr{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.hr:last-child{border-bottom:none}
+.hd{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.vqi{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--s2);margin-bottom:7px;border:1px solid var(--bd)}
+.vqi.fx{border-color:var(--terra);background:var(--ts)}
+.vqn{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ri{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.ri:last-child{border-bottom:none}
+.rsc{font-family:"DM Serif Display",serif;font-size:15px;color:var(--terra);white-space:nowrap;margin-left:auto}
+.pgd{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.pc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden;box-sizing:border-box;transition:transform .15s,box-shadow .15s;cursor:pointer}
+.pc:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.pci{height:130px;background:linear-gradient(135deg,var(--s3),var(--s2));display:flex;align-items:center;justify-content:center;font-size:32px;background-size:cover;background-position:center}
+.pcb{padding:12px}
+.pcc{font-weight:700;font-size:13px;color:var(--ink)}
+.pcd{font-size:11px;color:var(--t2);margin-top:3px}
+.pcp{font-family:"DM Serif Display",serif;font-size:16px;color:var(--terra);margin-top:8px}
+.pcf{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.ai{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;margin-bottom:7px}
+.aa{background:rgba(179,75,58,.08);border:1px solid rgba(179,75,58,.2)}
+.am{background:rgba(184,137,58,.08);border:1px solid rgba(184,137,58,.2)}
+.ab{background:rgba(58,107,138,.08);border:1px solid rgba(58,107,138,.2)}
+.ad{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--terra)}
+.am .ad{background:var(--warn)}
+.ab .ad{background:var(--info)}
+.brow{margin-bottom:10px}
+.blbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.bbg{height:6px;background:var(--s3);border-radius:99px;overflow:hidden}
+.bfl{height:100%;border-radius:99px;transition:width .5s}
+.mo{display:none;position:fixed;inset:0;background:rgba(31,42,36,.45);backdrop-filter:blur(4px);z-index:200;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto}
+.mo.on{display:flex}
+.md{background:var(--s1);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:540px;box-shadow:var(--shl)}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--bd)}
+.mtt{font-family:"DM Serif Display",serif;font-size:18px;color:var(--ink)}
+.bxx{background:none;border:none;font-size:22px;cursor:pointer;color:var(--t3);line-height:1;padding:2px 6px}
+.bxx:hover{color:var(--err)}
+.mbd{padding:22px}
+.mft{display:flex;justify-content:flex-end;gap:9px;padding:16px 22px;border-top:1px solid var(--bd)}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fgp{display:flex;flex-direction:column;gap:5px}
+.fl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--t2)}
+.fi{padding:9px 12px;border:1.5px solid var(--bd);border-radius:9px;font:500 13px "Manrope",sans-serif;color:var(--text);background:var(--s2);outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--green)}
+select.fi{cursor:pointer}
+.ic2{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;background:var(--s2);border:1px solid var(--bd);margin-bottom:7px}
+.ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ick{background:rgba(31,58,46,.12)}.ica{background:rgba(58,107,138,.12)}
+/* LOGIN */
+.lw{display:flex;align-items:stretch;min-height:100vh;position:relative;z-index:1}
+.la{flex:1.1;padding:56px 56px 44px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;color:#f0e6d0;background:linear-gradient(180deg,rgba(20,38,30,.78) 0%,rgba(15,28,22,.97) 100%),url("https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80") center/cover}
+.la::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 85% 105%,rgba(184,89,58,.38),transparent 55%)}
+.la::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 6px);pointer-events:none}
+.lai{position:relative;z-index:1}
+.lamk{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#d8c89e;font-weight:600;display:flex;align-items:center;gap:10px}
+.lamk::before{content:"";width:22px;height:1px;background:#d8c89e}
+.lbrand{display:flex;align-items:center;gap:11px;margin-top:34px}
+.lbmk{width:38px;height:38px;border-radius:10px;background:var(--terra);display:grid;place-items:center;color:#fbf7ee;box-shadow:0 6px 18px rgba(184,89,58,.4)}
+.lbmk svg{stroke:#fbf7ee;width:20px;height:20px}
+.lbtx{font-family:"DM Serif Display",serif;font-size:24px;color:#fbf7ee;letter-spacing:-.01em}
+.lah{font-family:"DM Serif Display",serif;font-size:54px;line-height:1.04;margin-top:38px;letter-spacing:-.02em}
+.lah em{font-style:italic;color:#e8b48f}
+.lap{font-size:14.5px;color:#c9bea1;line-height:1.65;margin-top:16px;max-width:400px}
+.lfeat{margin-top:26px;display:flex;flex-direction:column;gap:11px}
+.lfi{display:flex;align-items:center;gap:11px;font-size:13px;color:#d8c89e}
+.lfd{width:5px;height:5px;border-radius:50%;background:var(--terra2);box-shadow:0 0 0 4px rgba(184,89,58,.18);flex-shrink:0}
+.lmt{display:flex;gap:32px;flex-wrap:wrap;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a39775;border-top:1px solid rgba(255,255,255,.08);padding-top:18px}
+.lmt span{display:flex;flex-direction:column;gap:2px}
+.lmt b{font-family:"DM Serif Display",serif;font-size:22px;color:#e8b48f;font-weight:400;letter-spacing:0;line-height:1}
+.lmt i{font-style:normal;font-size:9.5px;letter-spacing:.18em;color:#7a8c7d}
+.lcrd{margin-top:14px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7a8c7d;font-weight:500}
+.lfw{flex:1;display:flex;align-items:center;justify-content:center;padding:32px;background:var(--bg)}
+.lbx{background:linear-gradient(180deg,#fdfaf2,var(--s1));border:1px solid var(--bd);border-radius:20px;padding:38px 38px 28px;width:100%;max-width:440px;box-shadow:var(--shl);position:relative}
+.lbx::before{content:"";position:absolute;inset:0;border-radius:20px;background:linear-gradient(180deg,rgba(184,89,58,.05),transparent 30%);pointer-events:none}
+.lbxh{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ley{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);font-weight:700}
+.lstat{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--t2);background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 9px 4px 8px}
+.lsd{width:6px;height:6px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 3px rgba(184,137,58,.2);animation:lpls 1.6s ease-in-out infinite}
+.lstat.ok .lsd{background:var(--ok);box-shadow:0 0 0 3px rgba(63,122,81,.18);animation:none}
+.lstat.off .lsd{background:var(--terra);box-shadow:0 0 0 3px rgba(184,89,58,.2);animation:none}
+@keyframes lpls{0%,100%{opacity:1}50%{opacity:.45}}
+.lh{font-family:"DM Serif Display",serif;font-size:36px;color:var(--ink);margin-top:14px;letter-spacing:-.01em;line-height:1.1}
+.lp{color:var(--t2);font-size:14px;margin-top:8px;margin-bottom:0;line-height:1.5}
+.rtbs{display:flex;gap:3px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:3px;margin-top:22px;margin-bottom:20px}
+.rtb{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--t2);transition:all .14s}
+.rtb svg{opacity:.5;transition:opacity .14s;stroke:currentColor;stroke-width:1.8;fill:none;flex-shrink:0}
+.rtb.on{background:var(--green);color:#fbf7ee}.rtb.on svg{opacity:1}
+.rtb:not(.on):hover{color:var(--ink);background:rgba(255,255,255,.5)}
+.lor{display:flex;align-items:center;gap:12px;color:var(--t3);font-size:12px;margin:16px 0}
+.lor::before,.lor::after{content:"";flex:1;height:1px;background:var(--bd)}
+.gb{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border:1.5px solid var(--bd);border-radius:10px;background:var(--s1);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;transition:all .14s;font-family:inherit}
+.gb:hover{background:var(--s2);border-color:var(--bd2);transform:translateY(-1px);box-shadow:var(--sh)}
+.fii{position:relative;display:flex;align-items:center}
+.fii svg{position:absolute;left:13px;width:15px;height:15px;color:var(--t3);pointer-events:none;z-index:2;stroke:currentColor;stroke-width:1.8;fill:none}
+.fii-i{padding-left:38px!important;padding-right:38px!important;height:44px}
+.fii:focus-within svg{color:var(--green)}
+.fpwt{position:absolute;right:8px;width:30px;height:30px;border:none;background:transparent;border-radius:7px;cursor:pointer;display:grid;place-items:center;color:var(--t3);transition:all .14s}
+.fpwt:hover{background:var(--s2);color:var(--ink)}
+.fpwt svg{width:15px;height:15px;position:static;stroke:currentColor;stroke-width:1.8;fill:none}
+.le{display:none;align-items:flex-start;gap:9px;color:var(--err);font-size:12.5px;font-weight:500;margin-top:12px;background:var(--ts);padding:10px 12px;border-radius:9px;border-left:3px solid var(--err);line-height:1.45}
+.le.on{display:flex;animation:shk .35s ease}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.le::before{content:"!";flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--err);color:#fbf7ee;font-weight:800;font-size:11px;display:grid;place-items:center;margin-top:1px}
+.lbtn{width:100%;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:7px;padding:14px;border-radius:10px;font-size:13.5px;font-weight:600;letter-spacing:.02em;background:var(--green);color:#fbf7ee;border:none;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px -8px rgba(31,58,46,.45);transition:all .14s;overflow:hidden;position:relative}
+.lbtn::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);transform:translateX(-100%);transition:transform .55s}
+.lbtn:hover{background:var(--green2);transform:translateY(-1px)}.lbtn:hover::before{transform:translateX(100%)}
+.lbtn.busy{pointer-events:none;opacity:.85}
+.lhint{margin-top:22px;padding:14px;border:1px dashed var(--bd);border-radius:11px;background:rgba(255,255,255,.4)}
+.lhh{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.lhh::after{content:"";flex:1;height:1px;background:var(--bd)}
+.lhrow{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--t2);padding:4px 6px;margin:0 -6px;cursor:pointer;border-radius:6px;transition:background .12s}
+.lhrow:hover{background:var(--s2)}
+.lhrow .mono{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink)}
+.lhsep{color:var(--t3)!important}
+.lhtag{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;flex-shrink:0;width:60px;text-align:center}
+.lhtag.ra{background:rgba(184,89,58,.15);color:var(--terra)}
+.lhtag.rc{background:rgba(63,122,81,.14);color:var(--ok)}
+.lhtag.re{background:rgba(58,107,138,.14);color:var(--info)}
+.lfoot{margin-top:18px;text-align:center;font-size:10.5px;color:var(--t3);letter-spacing:.05em}
+@media(max-width:900px){.la{display:none}.lbx{max-width:480px;padding:32px 26px}}
+/* ── TOAST MODAL ── */
+.tov{position:fixed;inset:0;background:rgba(31,42,36,.5);backdrop-filter:blur(3px);opacity:0;transition:opacity .25s;pointer-events:none;z-index:500}
+.tov.on{opacity:1;pointer-events:auto}
+.tst{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:var(--s1);border:1px solid var(--bd);border-radius:16px;min-width:360px;max-width:450px;box-shadow:0 24px 60px -12px rgba(31,42,36,.35);opacity:0;transition:all .28s cubic-bezier(.2,.8,.3,1);pointer-events:auto;overflow:hidden;z-index:501}
+.tst.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.tst::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.tok::before{background:var(--ok)}.twn::before{background:var(--warn)}.ter::before{background:var(--err)}.tif::before{background:var(--info)}
+.tbdy{display:flex;align-items:flex-start;gap:13px;padding:20px 22px 16px 26px}
+.tico{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.tok .tico{background:rgba(63,122,81,.12);color:var(--ok)}.twn .tico{background:rgba(184,137,58,.15);color:var(--warn)}.ter .tico{background:rgba(184,89,58,.12);color:var(--terra)}.tif .tico{background:rgba(58,107,138,.1);color:var(--info)}
+.ttl{font-family:"DM Serif Display",serif;font-size:18px;color:var(--ink);margin-bottom:3px}.tmg{font-size:13px;color:var(--t2);line-height:1.5}
+.tcl{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:16px;transition:all .14s}.tcl:hover{background:var(--bg);color:var(--ink)}
+.tac{padding:10px 22px;background:var(--bg);border-top:1px solid var(--bd);display:flex;justify-content:flex-end}
+.tok2{background:var(--green);color:#fbf7ee;border:none;border-radius:8px;padding:7px 16px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}.tok2:hover{background:var(--green2)}
+
+/* ── FONDO PROFESIONAL CON PATRÓN ──────────────────────────────────────────── */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(ellipse at 15% 15%,rgba(31,58,46,.06),transparent 50%),
+    radial-gradient(ellipse at 85% 85%,rgba(184,89,58,.05),transparent 50%),
+    radial-gradient(ellipse at 50% 0%,rgba(156,122,60,.04),transparent 40%);
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(31,42,36,.025) 39px,rgba(31,42,36,.025) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(31,42,36,.025) 39px,rgba(31,42,36,.025) 40px);
+}
+
+/* ── ANIMACIONES GLOBALES ──────────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 rgba(31,58,46,0)}50%{box-shadow:0 0 0 4px rgba(31,58,46,.12)}}
+
+.pg2.on .sc{animation:fadeUp .3s ease both}
+.pg2.on .sc:nth-child(1){animation-delay:.04s}
+.pg2.on .sc:nth-child(2){animation-delay:.08s}
+.pg2.on .sc:nth-child(3){animation-delay:.12s}
+.pg2.on .sc:nth-child(4){animation-delay:.16s}
+.pg2.on .sc:nth-child(5){animation-delay:.2s}
+.pg2.on .sc:nth-child(6){animation-delay:.24s}
+.pg2.on .crd{animation:fadeUp .35s ease both}
+.pg2.on .crd:nth-child(2){animation-delay:.1s}
+.pg2.on .crd:nth-child(3){animation-delay:.18s}
+.pg2.on .crd:nth-child(4){animation-delay:.24s}
+
+/* ── CARDS INMUEBLE ── */
+.pc{cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.3,1),box-shadow .25s,border-color .2s}
+.pc:hover{border-color:var(--bd2);transform:translateY(-4px);box-shadow:0 20px 40px -12px rgba(31,42,36,.18)}
+
+/* ── IMAGEN INMUEBLE EN CARD ── */
+.pci{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--s3) 0%,var(--s2) 100%)}
+.pci img{transition:transform .4s ease}
+.pc:hover .pci img{transform:scale(1.06)}
+
+/* ── EMPTY STATES CON SVG ── */
+.svg-ei{display:flex;align-items:center;justify-content:center;opacity:.35}
+.svg-ei svg{stroke:var(--ink)}
+.emp{padding:40px 20px}
+.emp .svg-ei{margin-bottom:12px}
+
+/* ── SKELETON LOADER ── */
+.skel{border-radius:6px;background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+
+/* ── HOVER EN FILAS ── */
+.ri{cursor:pointer}
+.ri:hover{transform:translateX(3px)}
+
+/* ── BOTONES CON ANIMACIÓN ── */
+.btn{transition:all .15s cubic-bezier(.2,.8,.3,1)}
+.bg2:hover{transform:translateY(-2px);box-shadow:0 6px 18px -6px rgba(31,58,46,.45)}
+.be2:hover{transform:translateY(-1px)}
+
+/* ── STAT CARDS ── */
+.sc{transition:transform .2s cubic-bezier(.2,.8,.3,1),box-shadow .2s}
+.sc:hover{transform:translateY(-4px);box-shadow:0 12px 28px -8px rgba(31,42,36,.14)}
+
+/* ── TOPBAR ── */
+.tb{backdrop-filter:blur(12px);background:rgba(251,247,238,.92)}
+
+/* ── MODAL DE DETALLE INMUEBLE ── */
+.mo-det{position:fixed;inset:0;background:rgba(20,28,22,.55);backdrop-filter:blur(8px);z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;padding:20px}
+.mo-det.on{opacity:1;pointer-events:all}
+.md-det{background:var(--s1);border:1px solid var(--bd);border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;transform:scale(.96) translateY(10px);transition:transform .3s cubic-bezier(.2,.8,.3,1);box-shadow:0 32px 64px -16px rgba(20,28,22,.35)}
+.mo-det.on .md-det{transform:scale(1) translateY(0)}
+.det-img{height:260px;background:linear-gradient(135deg,var(--s3),var(--s2));position:relative;overflow:hidden;border-radius:18px 18px 0 0}
+.det-img img{width:100%;height:100%;object-fit:cover}
+.det-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:.3}
+.det-badges{position:absolute;top:14px;left:14px;display:flex;gap:7px}
+.det-price-badge{position:absolute;bottom:14px;right:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(4px);border-radius:10px;padding:8px 14px;font-family:"DM Serif Display",serif;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+.det-body{padding:24px}
+.det-title{font-family:"DM Serif Display",serif;font-size:24px;color:var(--ink);margin-bottom:4px}
+.det-loc{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:6px;margin-bottom:18px}
+.det-loc svg{flex-shrink:0;stroke:var(--terra)}
+.det-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.det-stat{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center}
+.det-stat-v{font-family:"DM Serif Display",serif;font-size:20px;color:var(--ink)}
+.det-stat-l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;display:flex;align-items:center;justify-content:center;gap:4px}
+.det-stat-l svg{stroke:var(--t3)}
+.det-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.det-info-row{display:flex;flex-direction:column;gap:3px}
+.det-info-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:700}
+.det-info-val{font-size:13px;font-weight:600;color:var(--ink)}
+.det-asesor{display:flex;align-items:center;gap:10px;padding:12px;background:var(--s2);border-radius:10px;border:1px solid var(--bd)}
+.det-av{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.det-av svg{stroke:#fff}
+.det-footer{display:flex;gap:9px;justify-content:flex-end;padding:16px 24px;border-top:1px solid var(--bd);background:rgba(239,230,212,.25)}
+
+/* ── GALERÍA DE IMAGENES EN MODAL ── */
+.img-upload-zone{border:2px dashed var(--bd);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .15s;background:var(--bg);color:var(--t2)}
+.img-upload-zone:hover{border-color:var(--green);background:var(--gs);color:var(--green)}
+.img-upload-zone svg{margin:0 auto 8px;display:block;stroke:currentColor}
+.img-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px}
+.img-thumb{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;border:1.5px solid var(--bd);cursor:pointer;transition:transform .15s}
+.img-thumb:hover{transform:scale(1.05)}
+
+/* ── LOADING SPINNER ── */
+.spin{animation:spin .8s linear infinite}
+
+/* ── INMUEBLE CARD imagen con transición ── */
+.pci-no-img{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--s3) 0%,var(--s2) 100%)}
+/* ── CHAT ── */
+.chat-burbuja{max-width:75%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;word-break:break-word}
+.chat-burbuja.yo{background:var(--green);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-burbuja.otro{background:var(--s1);color:var(--ink);align-self:flex-start;border:1px solid var(--bd);border-bottom-left-radius:4px}
+.chat-burbuja.staff{background:var(--terra);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-meta{font-size:10px;opacity:.65;margin-top:3px}
+.chat-wrap{display:flex;flex-direction:column;gap:2px}
+.chat-wrap.yo{align-items:flex-end}
+.chat-wrap.otro{align-items:flex-start}
+.chat-canal-item{padding:10px 12px;border-radius:9px;cursor:pointer;border:1px solid var(--bd);background:var(--s1);margin-bottom:6px;transition:all .14s}
+.chat-canal-item:hover,.chat-canal-item.on{background:var(--s2);border-color:var(--bd2)}
+.chat-canal-nm{font-weight:700;font-size:13px}
+.chat-canal-preview{font-size:11px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-unread{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0}
+
+/* ── CHATBOT IA ── */
+#ai-fab{position:fixed;bottom:24px;right:24px;z-index:9000;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--terra) 0%,#8b3a62 100%);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;color:#fff;transition:transform .18s,box-shadow .18s}
+#ai-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.3)}
+#ai-fab .ai-pulse{position:absolute;inset:0;border-radius:50%;background:rgba(184,89,58,.35);animation:aipulse 2s ease-out infinite}
+@keyframes aipulse{0%{transform:scale(1);opacity:.7}70%{transform:scale(1.6);opacity:0}100%{transform:scale(1.6);opacity:0}}
+#ai-panel{position:fixed;bottom:88px;right:24px;z-index:9000;width:380px;max-height:600px;background:var(--s1);border:1px solid var(--bd2);border-radius:18px;box-shadow:0 12px 48px rgba(0,0,0,.18);display:none;flex-direction:column;overflow:hidden;transition:all .2s}
+#ai-panel.on{display:flex}
+#ai-panel-header{background:linear-gradient(135deg,var(--terra) 0%,#8b3a62 100%);padding:14px 16px;display:flex;align-items:center;gap:10px;color:#fff;flex-shrink:0}
+#ai-panel-header svg{flex-shrink:0}
+.ai-hinfo{flex:1}
+.ai-htitle{font-family:'DM Serif Display',serif;font-size:15px;font-weight:700}
+.ai-hsub{font-size:11px;opacity:.8;margin-top:1px}
+#ai-msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:420px}
+.ai-msg{display:flex;flex-direction:column;gap:3px}
+.ai-msg.user{align-items:flex-end}
+.ai-msg.bot{align-items:flex-start}
+.ai-bubble{padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.55;word-break:break-word;max-width:90%}
+.ai-bubble.user{background:var(--terra);color:#fff;border-bottom-right-radius:4px}
+.ai-bubble.bot{background:var(--s2);color:var(--ink);border:1px solid var(--bd);border-bottom-left-radius:4px}
+.ai-bubble.bot.thinking{opacity:.6;font-style:italic}
+.ai-time{font-size:10px;color:var(--t3);padding:0 4px}
+#ai-inp-wrap{padding:10px 12px;border-top:1px solid var(--bd);display:flex;gap:8px;background:var(--s1);flex-shrink:0}
+#ai-input{flex:1;font-size:13px}
+#ai-send{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--terra);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:background .15s}
+#ai-send:hover{background:#8b3a62}
+#ai-send:disabled{opacity:.5;cursor:default}
+.ai-chips{display:flex;flex-wrap:wrap;gap:6px;padding:6px 14px 10px}
+.ai-chip{font-size:11px;padding:5px 11px;border-radius:20px;background:var(--s2);border:1px solid var(--bd);cursor:pointer;color:var(--t2);transition:all .13s;white-space:nowrap}
+.ai-chip:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN ════ -->
+<div id="lw" class="lw">
+  <aside class="la">
+    <div>
+      <div class="lamk">PropTech · UniQuindío 2026—1</div>
+      <div class="lbrand">
+        <div class="lbmk"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2v-9z"/></svg></div>
+        <div class="lbtx">PropTech</div>
+      </div>
+      <h1 class="lah">Donde cada<br/><em>llave</em> abre una<br/>nueva historia.</h1>
+      <p class="lap">Plataforma integral de gestión inmobiliaria para Armenia y el Eje Cafetero. Inmuebles, asesores, visitas y operaciones — en un solo lugar.</p>
+      <div class="lfeat">
+        <div class="lfi"><span class="lfd"></span><span>Catálogo en tiempo real con filtros avanzados</span></div>
+        <div class="lfi"><span class="lfd"></span><span>Asignación inteligente de asesores y visitas</span></div>
+        <div class="lfi"><span class="lfd"></span><span>Alertas, recomendaciones e intenciones de cierre</span></div>
+      </div>
+    </div>
+    <div class="lai">
+      <div class="lmt">
+        <span><b>08</b><i>Inmuebles</i></span>
+        <span><b>03</b><i>Clientes</i></span>
+        <span><b>03</b><i>Asesores</i></span>
+        <span><b>UQ</b><i>2026—1</i></span>
+      </div>
+      <div class="lcrd">Sharif Giraldo · Juan S. Hernández · Santiago Ospina</div>
+    </div>
+  </aside>
+  <div class="lfw">
+    <div class="lbx">
+      <div class="lbxh">
+        <div class="ley">Acceso al sistema</div>
+        <div class="lstat" id="lstat"><span class="lsd"></span><span id="lstxt">Conectando…</span></div>
+      </div>
+      <h2 class="lh">Bienvenido<br/>de vuelta.</h2>
+      <p class="lp">Selecciona tu rol e ingresa con tus credenciales.</p>
+      <div class="rtbs" role="tablist">
+        <div class="rtb on" data-role="admin" onclick="srl('admin',this)" role="tab">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"/></svg><span>Administrador</span>
+        </div>
+        <div class="rtb" data-role="cliente" onclick="srl('cliente',this)" role="tab">
+          <svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Cliente</span>
+        </div>
+        <div class="rtb" data-role="asesor" onclick="srl('asesor',this)" role="tab">
+          <svg width="14" height="14" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Asesor</span>
+        </div>
+      </div>
+      <div class="fgp" style="margin-top:4px">
+        <label class="fl" for="lc">Correo</label>
+        <div class="fii">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          <input class="fi fii-i" id="lc" value="admin@proptech.co" autocomplete="username" onkeydown="if(event.key==='Enter')lgn()"/>
+        </div>
+      </div>
+      <div class="fgp" style="margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <label class="fl" for="lp">Contraseña</label>
+          <span style="font-size:11px;color:var(--terra);font-weight:600;cursor:pointer" onclick="tst('Contacta al administrador para recuperar el acceso.','info')">¿Olvidaste tu contraseña?</span>
+        </div>
+        <div class="fii">
+          <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <input class="fi fii-i" type="password" id="lp" value="admin123" autocomplete="current-password" onkeydown="if(event.key==='Enter')lgn()"/>
+          <button type="button" class="fpwt" id="fpwt" onclick="tpw()" aria-label="Mostrar contraseña">
+            <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="le" class="le"></div>
+      <button class="lbtn" id="lbtn" onclick="lgn()">
+        <span>Iniciar sesión</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+      <div class="lhint">
+        <div class="lhh">Credenciales de demostración</div>
+        <div class="lhrow" onclick="srlq('admin@proptech.co','admin123','admin')">
+          <span class="lhtag ra">Admin</span><span class="mono">admin@proptech.co</span><span class="mono lhsep">·</span><span class="mono">admin123</span>
+        </div>
+        <div class="lhrow" onclick="srlq('mario@gmail.com','mar123','cliente')">
+          <span class="lhtag rc">Cliente</span><span class="mono">mario@gmail.com</span><span class="mono lhsep">·</span><span class="mono">mar123</span>
+        </div>
+        <div class="lhrow" onclick="srlq('sandra@gmail.com','san123','cliente')">
+          <span class="lhtag rc">Cliente</span><span class="mono">sandra@gmail.com</span><span class="mono lhsep">·</span><span class="mono">san123</span>
+        </div>
+        <div class="lhrow" onclick="srlq('ana@proptech.co','ana123','asesor')">
+          <span class="lhtag re">Asesor</span><span class="mono">ana@proptech.co</span><span class="mono lhsep">·</span><span class="mono">ana123</span>
+        </div>
+        <div class="lhrow" onclick="srlq('carlos@proptech.co','car123','asesor')">
+          <span class="lhtag re">Asesor</span><span class="mono">carlos@proptech.co</span><span class="mono lhsep">·</span><span class="mono">car123</span>
+        </div>
+      </div>
+      <div class="lfoot">© 2026 PropTech · Universidad del Quindío</div>
+      <!-- Solo visible cuando rol = cliente -->
+      <div id="lreg-link" style="display:none;margin-top:12px;text-align:center;font-size:12.5px;color:var(--t2)">
+        ¿No tienes cuenta?
+        <span onclick="abrirRegistroCliente()" style="color:var(--terra);font-weight:700;cursor:pointer;text-decoration:underline">Regístrate como cliente</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app" class="app" style="display:none">
+  <aside class="sb">
+    <div class="logo">
+      <div class="lgr">
+        <div class="lgmk">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2v-9z"/></svg>
+        </div>
+        <div><div class="lgt">PropTech</div><div class="lgs">Real Estate OS</div></div>
+      </div>
+    </div>
+    <div class="rbd" id="rbd"></div>
+    <nav class="nav" id="nm"></nav>
+    <div class="sf">PropTech · UniQuindío · 2026—1</div>
+  </aside>
+  <main class="mn">
+    <div class="tb">
+      <div class="tbw">
+        <div class="tbey">Sistema Inmobiliario</div>
+        <div id="pgt" class="tbt">Dashboard</div>
+      </div>
+      <div class="tbr">
+        <div class="sbx">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input placeholder="Buscar…" id="gs" oninput="gsr(this.value)"/>
+        </div>
+        <div class="up" id="up" onclick="go('perfil')">Admin</div>
+        <button id="breg" class="btn bg2 bsm" onclick="oM('mi')" style="display:none">+ Inmueble</button>
+        <button class="btn be2 bsm" onclick="lgo()">Salir</button>
+      </div>
+    </div>
+    <div class="ct">
+
+      <!-- DASHBOARD ADMIN -->
+      <div class="pg2 on" id="pg-dashboard">
+        <div class="sg">
+          <div class="sc c1"><div class="sv" id="s1">0</div><div class="sl">Inmuebles</div></div>
+          <div class="sc c2"><div class="sv" id="s2">0</div><div class="sl">Clientes</div></div>
+          <div class="sc c3"><div class="sv" id="s3">0</div><div class="sl">Asesores</div></div>
+          <div class="sc c4"><div class="sv" id="s4">0</div><div class="sl">Visitas pendientes</div></div>
+          <div class="sc c5"><div class="sv" id="s5">0</div><div class="sl">Alertas activas</div></div>
+          <div class="sc c6"><div class="sv" id="s6">0</div><div class="sl">Operaciones</div></div>
+        </div>
+        <div class="g2">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Próximas Visitas</span><button class="btn bg2 bsm" onclick="atv()">Atender siguiente</button></div>
+            <div class="cb" id="dv"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas pendientes</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Alertas Prioritarias</span><button class="btn be2 bsm" onclick="rsal()">Resolver</button></div>
+            <div class="cb" id="da"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><div class="et">Sin alertas</div></div></div>
+          </div>
+        </div>
+        <div class="g2 mt">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Últimas Acciones</span><button class="btn bs2 bsm" onclick="dsh()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Deshacer</button></div>
+            <div class="cb" id="dh"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div class="et">Sin acciones</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Operaciones Recientes</span></div>
+            <div class="cb" id="do"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div class="et">Sin operaciones</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CLIENTE -->
+      <div class="pg2" id="pg-dash-cliente">
+        <div id="cbv" style="font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);margin-bottom:20px"></div>
+        <div class="g2">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Mis Favoritos</span><span id="cfcnt" class="bdg bk">0</span></div>
+            <div class="cb" id="cfav"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div class="et">Sin favoritos aún</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Mis Visitas</span></div>
+            <div class="cb" id="cvis"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas</div></div></div>
+          </div>
+        </div>
+        <div class="crd mt">
+          <div class="ch"><span class="ctt">Recomendaciones para ti</span></div>
+          <div class="cb" id="crec"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="et">Calculando…</div></div></div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD ASESOR -->
+      <div class="pg2" id="pg-dash-asesor">
+        <div id="abv" style="font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);margin-bottom:20px"></div>
+        <div class="g2">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Mis Inmuebles</span></div>
+            <div class="cb" id="ainms"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div class="et">Sin inmuebles asignados</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Mis Visitas</span></div>
+            <div class="cb" id="avis"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas</div></div></div>
+          </div>
+        </div>
+        <div class="crd mt">
+          <div class="ch"><span class="ctt">Mis Operaciones</span></div>
+          <div class="cb">
+            <div class="tw"><table><thead><tr><th>ID</th><th>Tipo</th><th>Inmueble</th><th>Cliente</th><th>Valor</th><th>Estado</th></tr></thead><tbody id="aops"><tr><td colspan="6"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div class="et">Sin operaciones</div></div></td></tr></tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATÁLOGO -->
+      <div class="pg2" id="pg-catalogo">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn bs2 bsm" onclick="tv('grid')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Tarjetas</button>
+            <button class="btn bs2 bsm" onclick="tv('table')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> Tabla</button>
+            <button class="btn bs2 bsm" onclick="tv('filter')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filtros</button>
+          </div>
+        </div>
+        <div id="tig"><div class="pgd" id="pgd"></div></div>
+        <div id="tit" style="display:none">
+          <div class="crd"><div class="tw"><table><thead><tr><th>Código</th><th>Tipo</th><th>Dirección</th><th>Precio</th><th>Hab.</th><th>Estado</th><th>Finalidad</th><th>Asesor</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></div>
+        </div>
+        <div id="tif" style="display:none">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Búsqueda Avanzada</span></div>
+            <div class="cb">
+              <div class="fg">
+                <div class="fgp"><label class="fl">Tipo</label><select class="fi" id="ftp2"><option value="">Todos</option><option>APARTAMENTO</option><option>CASA</option><option>LOCALCOMERCIAL</option><option>OFICINA</option><option>LOTE</option><option>BODEGA</option></select></div>
+                <div class="fgp"><label class="fl">Finalidad</label><select class="fi" id="ffn2"><option value="">Todas</option><option>VENTA</option><option>ARRIENDO</option></select></div>
+                <div class="fgp"><label class="fl">Precio mínimo ($)</label><input class="fi" type="number" id="fpn" placeholder="0"/></div>
+                <div class="fgp"><label class="fl">Precio máximo ($)</label><input class="fi" type="number" id="fpx" placeholder="Sin límite"/></div>
+                <div class="fgp"><label class="fl">Hab. mínimas</label><input class="fi" type="number" id="fhb" placeholder="0" min="0"/></div>
+              </div>
+              <div style="margin-top:14px"><button class="btn bg2" onclick="fil()">Buscar</button></div>
+              <div id="frs" style="margin-top:16px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <div class="pg2" id="pg-clientes">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn bg2" onclick="oM('mc')">+ Registrar Cliente</button></div>
+        <div class="crd"><div class="tw"><table><thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Correo</th><th>Presupuesto</th><th>Estado</th><th>Fav.</th><th></th></tr></thead><tbody id="tbc"></tbody></table></div></div>
+      </div>
+
+      <!-- ASESORES -->
+      <div class="pg2" id="pg-asesores">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn bg2" onclick="oM('ma')">+ Registrar Asesor</button></div>
+        <div class="crd"><div class="tw"><table><thead><tr><th>ID</th><th>Nombre</th><th>Zona</th><th>Correo</th><th>Inmuebles</th><th>Visitas</th><th>Cierres</th><th>Efectividad</th><th></th></tr></thead><tbody id="tba"></tbody></table></div></div>
+      </div>
+
+      <!-- VISITAS -->
+      <div class="pg2" id="pg-visitas">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+          <button class="btn bg2" onclick="oM('mv')">+ Agendar Visita</button>
+        </div>
+        <!-- Admin / Asesor: cola FIFO + tabla completa (oculto hasta que ldv() lo muestre) -->
+        <div id="vis-admin" class="g2" style="display:none">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Cola de Visitas</span><button class="btn bg2 bsm" onclick="atv();ldv()">Atender siguiente</button></div>
+            <div class="cb" id="vq"><div class="emp"><div class="et">Cola vacía</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Todas las Visitas</span></div>
+            <div class="cb"><div class="tw"><table><thead><tr><th>Cliente</th><th>Inmueble</th><th>Asesor</th><th>Fecha</th><th>Estado</th><th>Obs.</th></tr></thead><tbody id="tbv"></tbody></table></div></div>
+          </div>
+        </div>
+        <!-- Cliente: solo sus visitas, sin botón Atender -->
+        <div id="vis-cliente" style="display:none">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Mis Visitas Agendadas</span></div>
+            <div class="cb" id="vt-cli"><div class="emp"><div class="et">Sin visitas agendadas</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERACIONES -->
+      <div class="pg2" id="pg-operaciones">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn bg2" onclick="oM('mo')">+ Registrar Operación</button></div>
+        <div class="crd"><div class="tw"><table><thead><tr><th>ID</th><th>Tipo</th><th>Inmueble</th><th>Cliente</th><th>Asesor</th><th>Valor</th><th>Comisión</th><th>Estado</th></tr></thead><tbody id="tbo"></tbody></table></div></div>
+      </div>
+
+      <!-- CONTRATOS -->
+      <div class="pg2" id="pg-contratos">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn bg2" onclick="oM('mct')">+ Nuevo Contrato</button></div>
+        <div class="crd"><div class="tw"><table><thead><tr><th>ID</th><th>Tipo</th><th>Inmueble</th><th>Cliente</th><th>Inicio</th><th>Fin</th><th>Valor/mes</th><th>Estado</th></tr></thead><tbody id="tbct"></tbody></table></div></div>
+      </div>
+
+      <!-- ALERTAS -->
+      <div class="pg2" id="pg-alertas">
+        <div class="g2">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Alertas Activas</span><div style="display:flex;gap:7px"><button class="btn bg2 bsm" onclick="dtal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Detectar</button><button class="btn be2 bsm" onclick="rsal();lda()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Resolver</button></div></div>
+            <div class="cb" id="pqp"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><div class="et">Sin alertas</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Historial de Alertas</span></div>
+            <div class="cb" id="alrg"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="et">Sin registros</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMENDACIONES -->
+      <div class="pg2" id="pg-recomendaciones">
+        <!-- Admin: selector de cliente (oculto hasta que ldRec() lo muestre) -->
+        <div id="rec-admin" class="crd" style="display:none;margin-bottom:16px">
+          <div class="ch"><span class="ctt">Recomendaciones por Cliente</span></div>
+          <div class="cb">
+            <div class="fgp" style="max-width:360px">
+              <label class="fl">Seleccionar Cliente</label>
+              <select class="fi" id="rccli" onchange="crc()"><option value="">— Elegir cliente —</option></select>
+            </div>
+          </div>
+        </div>
+        <!-- Cliente: sus recomendaciones directas -->
+        <div id="rec-cliente" style="display:none">
+          <div class="crd" style="margin-bottom:16px">
+            <div class="ch"><span class="ctt">Inmuebles recomendados para ti</span><span id="rec-cnt" class="bdg bk">0</span></div>
+            <div class="cb" style="font-size:13px;color:var(--t2)">Basado en tu presupuesto, zona de interés y tipo de inmueble deseado.</div>
+          </div>
+        </div>
+        <div id="rcrs"></div>
+      </div>
+
+      <!-- INTENCIONES -->
+      <div class="pg2" id="pg-intenciones">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div></div>
+          <div id="btn-nueva-intencion"><button class="btn bg2" onclick="fsl();oM('mint')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            Registrar Intención
+          </button></div>
+        </div>
+        <div class="g2">
+          <div class="crd"><div class="ch"><span class="ctt">Intenciones Activas</span></div><div class="cb" id="intac"><div class="emp"><div class="et">Sin intenciones registradas</div></div></div></div>
+          <div>
+            <div class="crd"><div class="ch"><span class="ctt">Historial de Consultas</span></div><div class="cb" id="inthi"><div class="emp"><div class="et">Sin historial</div></div></div></div>
+            <div class="crd mt"><div class="ch"><span class="ctt">Alta Probabilidad de Cierre</span></div><div class="cb" id="intci"><div class="emp"><div class="et">Sin datos</div></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPORTAMIENTO -->
+      <div class="pg2" id="pg-comportamiento">
+        <div class="crd" style="margin-bottom:16px">
+          <div class="ch"><span class="ctt">Detección de Comportamiento Inusual</span><button class="btn bg2 bsm" onclick="ldcm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v3l2 2"/></svg> Analizar</button></div>
+          <div class="cb" id="cmres"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 14l4-4 4 4 5-5"/></svg></div><div class="et">Haz clic en Analizar para detectar patrones</div></div></div>
+        </div>
+      </div>
+
+      <!-- REPORTES -->
+      <div class="pg2" id="pg-reportes">
+        <div class="g2">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Ranking de Zonas</span></div>
+            <div class="cb" id="rzo"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Ranking de Asesores</span></div>
+            <div class="cb" id="ras"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+        </div>
+        <div class="g2 mt">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Inmuebles por Demanda</span></div>
+            <div class="cb" id="rdm"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">BST de Precios</span></div>
+            <div class="cb" id="rbst"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+        </div>
+        <div class="g2 mt">
+          <div class="crd">
+            <div class="ch"><span class="ctt">Grafo de Zonas</span></div>
+            <div class="cb" id="rgrf"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+          <div class="crd">
+            <div class="ch"><span class="ctt">Resumen General</span></div>
+            <div class="cb" id="rgn"><div class="emp"><div class="et">Cargando…</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERFIL -->
+      <!-- CHAT DE DUDAS -->
+      <div class="pg2" id="pg-chat">
+        <!-- CLIENTE: chat directo con el equipo de soporte -->
+        <div id="chat-cli-view">
+          <div class="crd" style="display:flex;flex-direction:column;height:calc(100vh - 148px)">
+            <div class="ch" style="flex-shrink:0">
+              <div>
+                <span class="ctt">Chat de Soporte</span>
+                <div style="font-size:12px;color:var(--t2);margin-top:2px">Admin y asesores te responden en tiempo real</div>
+              </div>
+              <span id="chat-cli-status" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--t3);background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 10px">
+                <span id="chat-cli-dot" style="width:6px;height:6px;border-radius:50%;background:var(--t3)"></span>
+                <span id="chat-cli-stxt">Conectando…</span>
+              </span>
+            </div>
+            <div id="chat-cli-msgs" style="flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:8px;background:var(--bg)">
+              <div class="emp" id="chat-cli-empty">
+                <div class="et" style="line-height:1.7">Escribe tu primera pregunta.<br>Admin y asesores verán tu mensaje y responderán en tiempo real.</div>
+              </div>
+            </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--bd);display:flex;gap:8px;background:var(--s1);flex-shrink:0">
+              <input class="fi" id="chat-cli-input" placeholder="Escribe tu mensaje…"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatCliEnviar()}"
+                style="flex:1"/>
+              <button class="btn bg2" onclick="chatCliEnviar()" style="flex-shrink:0">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- ADMIN/ASESOR: lista de salas + chat activo -->
+        <div id="chat-staff-view" style="display:none">
+          <div class="g2" style="height:calc(100vh - 148px)">
+            <div class="crd" style="height:100%;display:flex;flex-direction:column;min-height:0">
+              <div class="ch" style="flex-shrink:0">
+                <span class="ctt">Conversaciones</span>
+                <button class="btn bs2 bsm" onclick="chatStaffCargarSalas()">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-7.73"/></svg>
+                  Actualizar
+                </button>
+              </div>
+              <div id="chat-salas-lista" style="flex:1;overflow-y:auto;padding:8px 6px">
+                <div class="emp"><div class="et">Sin conversaciones activas</div></div>
+              </div>
+            </div>
+            <div class="crd" style="height:100%;display:flex;flex-direction:column;min-height:0">
+              <div class="ch" style="flex-shrink:0">
+                <span class="ctt" id="chat-staff-titulo">Elige una conversación</span>
+                <span id="chat-staff-badge" class="bdg bk" style="display:none"></span>
+              </div>
+              <div id="chat-staff-msgs" style="flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:8px;background:var(--bg)">
+                <div class="emp"><div class="et">Selecciona un cliente de la lista para ver y responder su chat.</div></div>
+              </div>
+              <div id="chat-staff-inp-wrap" style="display:none;padding:12px 16px;border-top:1px solid var(--bd);gap:8px;background:var(--s1);flex-shrink:0">
+                <input class="fi" id="chat-staff-input" placeholder="Escribe tu respuesta…"
+                  onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatStaffEnviar()}"
+                  style="flex:1"/>
+                <button class="btn bg2" onclick="chatStaffEnviar()" style="flex-shrink:0">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Enviar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg2" id="pg-perfil">
+        <div class="crd" style="max-width:600px">
+          <div class="ch"><span class="ctt">Mi Perfil</span></div>
+          <div class="cb">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+              <div style="position:relative;flex-shrink:0">
+                <div id="pav" onclick="chFotoPerfil()" style="width:80px;height:80px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;overflow:hidden;border:3px solid var(--bd);transition:opacity .2s" title="Cambiar foto de perfil">
+                  <svg id="pav-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <img id="pav-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%"/>
+                </div>
+                <div onclick="chFotoPerfil()" style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <input type="file" id="pav-input" accept="image/*" style="display:none" onchange="onFotoPerfilChange(this)"/>
+              </div>
+              <div>
+                <div id="pnm2" style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink)"></div>
+                <div id="pcr" style="font-size:13px;color:var(--t2);margin-top:3px"></div>
+                <div id="prl2" style="font-size:11px;color:var(--terra);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:4px"></div>
+                <button class="btn bs2 bxs" style="margin-top:8px" onclick="chFotoPerfil()">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Cambiar foto
+                </button>
+              </div>
+            </div>
+            <div class="fg">
+              <div class="fgp"><label class="fl">Nombre</label><input class="fi" id="pnm" placeholder="Tu nombre"/></div>
+              <div class="fgp"><label class="fl">Correo (solo lectura)</label><input class="fi" id="pc2" readonly style="opacity:.6"/></div>
+              <div class="fgp"><label class="fl">Teléfono</label><input class="fi" id="pte" placeholder="300-000-0000"/></div>
+              <div class="fgp"><label class="fl">Nueva contraseña</label><input class="fi" id="ppw" type="password" placeholder="Dejar en blanco para no cambiar"/></div>
+            </div>
+            <div style="margin-top:16px"><button class="btn bg2" onclick="gpf()">Guardar cambios</button></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ct -->
+  </main>
+</div>
+
+<!-- ════ MODALES ════ -->
+<!-- Modal Inmueble -->
+<div class="mo" id="mi">
+  <div class="md">
+    <div class="mh"><span class="mtt">Registrar Inmueble</span><button class="bxx" onclick="cM('mi')">×</button></div>
+    <div class="mbd">
+      <!-- Foto del inmueble -->
+      <div class="fgp" style="margin-bottom:16px;grid-column:1/-1">
+        <label class="fl">Foto del inmueble</label>
+        <div id="inm-foto-drop" onclick="document.getElementById('inm-foto-input').click()" ondragover="event.preventDefault()" ondrop="onInmFotoDrop(event)"
+          style="border:2px dashed var(--bd);border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--t2)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span style="font-size:13px">Haz clic o arrastra una imagen aquí</span>
+          <span style="font-size:11px;color:var(--t3)">JPG, PNG · máx 5 MB</span>
+        </div>
+        <img id="inm-foto-preview" src="" alt="" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid var(--bd)"/>
+        <input type="file" id="inm-foto-input" accept="image/*" style="display:none" onchange="onInmFotoChange(this)"/>
+      </div>
+      <div class="fg">
+        <div class="fgp"><label class="fl">Código *</label><input class="fi" id="icd" placeholder="INM-009"/></div>
+        <div class="fgp"><label class="fl">Dirección *</label><input class="fi" id="idir" placeholder="Cra 10 # 20-30"/></div>
+        <div class="fgp"><label class="fl">Ciudad</label><input class="fi" id="ici" placeholder="Armenia"/></div>
+        <div class="fgp"><label class="fl">Zona</label><input class="fi" id="izn" placeholder="Norte"/></div>
+        <div class="fgp"><label class="fl">Tipo</label><select class="fi" id="itp"><option>APARTAMENTO</option><option>CASA</option><option>LOCALCOMERCIAL</option><option>OFICINA</option><option>LOTE</option><option>BODEGA</option></select></div>
+        <div class="fgp"><label class="fl">Finalidad</label><select class="fi" id="ifn"><option>VENTA</option><option>ARRIENDO</option></select></div>
+        <div class="fgp"><label class="fl">Precio ($) *</label><input class="fi" type="number" id="ipr" placeholder="280000000"/></div>
+        <div class="fgp"><label class="fl">Área (m²)</label><input class="fi" type="number" id="iar" placeholder="85"/></div>
+        <div class="fgp"><label class="fl">Habitaciones</label><input class="fi" type="number" id="ihb" placeholder="3" min="0"/></div>
+        <div class="fgp"><label class="fl">Baños</label><input class="fi" type="number" id="ibn" placeholder="2" min="0"/></div>
+        <div class="fgp"><label class="fl">Estado</label><select class="fi" id="ies"><option>DISPONIBLE</option><option>ARRENDADO</option><option>VENDIDO</option><option>RESERVADO</option><option>MANTENIMIENTO</option></select></div>
+        <div class="fgp"><label class="fl">Asesor</label><select class="fi" id="ias"></select></div>
+      </div><!-- /fg -->
+    </div><!-- /mbd -->
+    <div class="mft"><button class="btn bs2" onclick="cM('mi')">Cancelar</button><button class="btn bg2" onclick="rgi()">Registrar</button></div>
+  </div>
+</div>
+
+<!-- Modal Cliente -->
+<div class="mo" id="mc">
+  <div class="md">
+    <div class="mh"><span class="mtt">Registrar Cliente</span><button class="bxx" onclick="cM('mc')">×</button></div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">Identificación *</label><input class="fi" id="cid" placeholder="1234567890"/></div>
+        <div class="fgp"><label class="fl">Nombre *</label><input class="fi" id="cnm" placeholder="Carlos Ramírez"/></div>
+        <div class="fgp"><label class="fl">Correo</label><input class="fi" id="ccr" placeholder="carlos@email.com"/></div>
+        <div class="fgp"><label class="fl">Teléfono</label><input class="fi" id="cte" placeholder="300-000-0000"/></div>
+        <div class="fgp"><label class="fl">Contraseña</label><input class="fi" type="password" id="cpw" placeholder="••••••"/></div>
+        <div class="fgp"><label class="fl">Tipo</label><select class="fi" id="ctp"><option>COMPRADOR</option><option>ARRENDATARIO</option><option>INVERSIONISTA</option></select></div>
+        <div class="fgp"><label class="fl">Presupuesto ($) *</label><input class="fi" type="number" id="cpr" placeholder="300000000"/></div>
+        <div class="fgp"><label class="fl">Zonas de interés</label><input class="fi" id="czn" placeholder="Norte, Centro"/></div>
+        <div class="fgp"><label class="fl">Inmueble deseado</label><select class="fi" id="cti"><option>APARTAMENTO</option><option>CASA</option><option>LOCALCOMERCIAL</option><option>OFICINA</option><option>LOTE</option></select></div>
+        <div class="fgp"><label class="fl">Hab. mínimas</label><input class="fi" type="number" id="chb" placeholder="2" min="0"/></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn bs2" onclick="cM('mc')">Cancelar</button><button class="btn bg2" onclick="rgc()">Registrar</button></div>
+  </div>
+</div>
+
+<!-- Modal Asesor -->
+<div class="mo" id="ma">
+  <div class="md">
+    <div class="mh"><span class="mtt">Registrar Asesor</span><button class="bxx" onclick="cM('ma')">×</button></div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">ID *</label><input class="fi" id="aid" placeholder="ASE-004"/></div>
+        <div class="fgp"><label class="fl">Nombre *</label><input class="fi" id="anm" placeholder="Laura Pérez"/></div>
+        <div class="fgp"><label class="fl">Correo</label><input class="fi" id="acr" placeholder="laura@proptech.co"/></div>
+        <div class="fgp"><label class="fl">Teléfono</label><input class="fi" id="ate" placeholder="315-000-0000"/></div>
+        <div class="fgp"><label class="fl">Zona asignada</label><input class="fi" id="azn" placeholder="Centro"/></div>
+        <div class="fgp"><label class="fl">Contraseña</label><input class="fi" type="password" id="apw" placeholder="••••••"/></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn bs2" onclick="cM('ma')">Cancelar</button><button class="btn bg2" onclick="rga()">Registrar</button></div>
+  </div>
+</div>
+
+<!-- Modal Visita -->
+<div class="mo" id="mv">
+  <div class="md">
+    <div class="mh"><span class="mtt">Agendar Visita</span><button class="bxx" onclick="cM('mv')">×</button></div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">Cliente *</label><select class="fi" id="vcl"></select></div>
+        <div class="fgp"><label class="fl">Inmueble *</label><select class="fi" id="vin"></select></div>
+        <div class="fgp"><label class="fl">Asesor</label><select class="fi" id="vas"></select></div>
+        <div class="fgp"><label class="fl">Fecha y hora *</label><input class="fi" type="datetime-local" id="vfh"/></div>
+        <div class="fgp"><label class="fl">Estado</label><select class="fi" id="ves">
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="CONFIRMADA">Confirmada</option>
+          <option value="REALIZADA">Realizada</option>
+          <option value="CANCELADA">Cancelada</option>
+          <option value="REPROGRAMADA">Reprogramada</option>
+        </select></div>
+        <div class="fgp" style="grid-column:1/-1"><label class="fl">Observaciones</label><input class="fi" id="vob" placeholder="Notas de la visita"/></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn bs2" onclick="cM('mv')">Cancelar</button><button class="btn bg2" onclick="rgv()">Agendar</button></div>
+  </div>
+</div>
+
+<!-- Modal Operación -->
+<div class="mo" id="mo">
+  <div class="md">
+    <div class="mh"><span class="mtt">Registrar Operación</span><button class="bxx" onclick="cM('mo')">×</button></div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">Inmueble</label><select class="fi" id="oin"></select></div>
+        <div class="fgp"><label class="fl">Cliente</label><select class="fi" id="ocl"></select></div>
+        <div class="fgp"><label class="fl">Asesor</label><select class="fi" id="oas"></select></div>
+        <div class="fgp"><label class="fl">Tipo</label><select class="fi" id="oti"><option value="ARRIENDO">Arriendo</option><option value="VENTA">Venta</option><option value="RENOVACION">Renovación de contrato</option><option value="CANCELACION_NEGOCIO">Cancelación de negocio</option></select></div>
+        <div class="fgp"><label class="fl">Valor ($)</label><input class="fi" type="number" id="ovl" placeholder="1800000"/></div>
+        <div class="fgp"><label class="fl">Comisión (%)</label><input class="fi" type="number" id="ocm" placeholder="3.5"/></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn bs2" onclick="cM('mo')">Cancelar</button><button class="btn bg2" onclick="rgo()">Registrar</button></div>
+  </div>
+</div>
+
+<!-- Modal Contrato -->
+<div class="mo" id="mct">
+  <div class="md">
+    <div class="mh"><span class="mtt">Registrar Contrato</span><button class="bxx" onclick="cM('mct')">×</button></div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">Inmueble</label><select class="fi" id="ctin"></select></div>
+        <div class="fgp"><label class="fl">Cliente</label><select class="fi" id="ctcl"></select></div>
+        <div class="fgp"><label class="fl">Tipo</label><select class="fi" id="cttp"><option>ARRIENDO</option><option>VENTA</option><option>RENOVACION</option></select></div>
+        <div class="fgp"><label class="fl">Valor mensual ($)</label><input class="fi" type="number" id="ctvm" placeholder="1800000"/></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn bs2" onclick="cM('mct')">Cancelar</button><button class="btn bg2" onclick="rgct()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="mo" id="mint"><div class="md">
+  <div class="mh"><span class="mtt">Registrar Intención de Compra / Arriendo</span><button class="bxx" onclick="cM('mint')">×</button></div>
+  <div class="mbd"><div class="fg">
+    <div class="fgp"><label class="fl">Inmueble *</label><select class="fi" id="intn"></select></div>
+    <div class="fgp"><label class="fl">Tipo de intención</label><select class="fi" id="intt"><option>COMPRA</option><option>ARRIENDO</option></select></div>
+    <div class="fgp"><label class="fl">Oferta económica ($)</label><input class="fi" type="number" id="intof" placeholder="0"/></div>
+    <div class="fgp" style="grid-column:1/-1"><label class="fl">Observaciones</label><input class="fi" id="intob" placeholder="Condiciones, requisitos, comentarios…"/></div>
+  </div></div>
+  <div class="mft"><button class="btn bs2" onclick="cM('mint')">Cancelar</button><button class="btn bg2" onclick="rgin()">Registrar</button></div>
+</div></div>
+
+<!-- ════ MODAL REGISTRO CLIENTE (desde login) ════ -->
+<div class="mo" id="mreg" style="z-index:600">
+  <div class="md" style="max-width:540px">
+    <div class="mh">
+      <div>
+        <span class="mtt">Crear cuenta de Cliente</span>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px">Completa tus datos para acceder a la plataforma</div>
+      </div>
+      <button class="bxx" onclick="cM('mreg')">×</button>
+    </div>
+    <div class="mbd">
+      <div class="fg">
+        <div class="fgp"><label class="fl">Identificación *</label><input class="fi" id="reg-id" placeholder="1234567890"/></div>
+        <div class="fgp"><label class="fl">Nombre completo *</label><input class="fi" id="reg-nm" placeholder="Carlos Ramírez"/></div>
+        <div class="fgp"><label class="fl">Correo *</label><input class="fi" type="email" id="reg-co" placeholder="carlos@email.com"/></div>
+        <div class="fgp"><label class="fl">Contraseña *</label><input class="fi" type="password" id="reg-pw" placeholder="••••••"/></div>
+        <div class="fgp"><label class="fl">Teléfono</label><input class="fi" id="reg-te" placeholder="300-000-0000"/></div>
+        <div class="fgp"><label class="fl">Tipo de cliente</label>
+          <select class="fi" id="reg-tp">
+            <option value="COMPRADOR">Comprador</option>
+            <option value="ARRENDATARIO">Arrendatario</option>
+            <option value="INVERSIONISTA">Inversionista</option>
+          </select>
+        </div>
+        <div class="fgp"><label class="fl">Presupuesto ($) *</label><input class="fi" type="number" id="reg-pr" placeholder="300000000"/></div>
+        <div class="fgp"><label class="fl">Zonas de interés</label><input class="fi" id="reg-zn" placeholder="Norte, Centro"/></div>
+        <div class="fgp"><label class="fl">Tipo de inmueble deseado</label>
+          <select class="fi" id="reg-ti">
+            <option value="">— Cualquiera —</option>
+            <option value="APARTAMENTO">Apartamento</option>
+            <option value="CASA">Casa</option>
+            <option value="LOCALCOMERCIAL">Local Comercial</option>
+            <option value="OFICINA">Oficina</option>
+            <option value="LOTE">Lote</option>
+            <option value="BODEGA">Bodega</option>
+          </select>
+        </div>
+        <div class="fgp"><label class="fl">Hab. mínimas</label><input class="fi" type="number" id="reg-mh" placeholder="1" value="1"/></div>
+      </div>
+      <div id="reg-err" class="le" style="margin-top:12px"></div>
+    </div>
+    <div class="mft">
+      <button class="btn bs2" onclick="cM('mreg')">Cancelar</button>
+      <button class="btn bg2" id="reg-btn" onclick="enviarRegistroCliente()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        Crear cuenta e ingresar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ CHATBOT IA PROPTECH ════ -->
+<button id="ai-fab" onclick="aiToggle()" title="Asistente IA PropTech">
+  <div class="ai-pulse"></div>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/>
+    <path d="M8 12v1a4 4 0 0 0 8 0v-1"/>
+    <path d="M3 17a9 9 0 0 1 18 0v1H3z"/>
+    <circle cx="9" cy="7" r="1" fill="currentColor"/>
+    <circle cx="15" cy="7" r="1" fill="currentColor"/>
+  </svg>
+</button>
+
+<div id="ai-panel">
+  <div id="ai-panel-header">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M8 12v1a4 4 0 0 0 8 0v-1"/><path d="M3 17a9 9 0 0 1 18 0v1H3z"/><circle cx="9" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/></svg>
+    <div class="ai-hinfo">
+      <div class="ai-htitle">Asistente IA PropTech</div>
+      <div class="ai-hsub">Pregúntame sobre inmuebles, visitas, contratos y más</div>
+    </div>
+    <button onclick="aiToggle()" style="background:none;border:none;color:#fff;cursor:pointer;opacity:.8;font-size:18px;line-height:1;padding:0 4px">×</button>
+  </div>
+  <div id="ai-msgs"></div>
+  <div class="ai-chips" id="ai-chips">
+    <span class="ai-chip" onclick="aiChip(this)">¿Qué inmuebles hay disponibles?</span>
+    <span class="ai-chip" onclick="aiChip(this)">¿Cómo agendo una visita?</span>
+    <span class="ai-chip" onclick="aiChip(this)">¿Cuáles son las zonas con más demanda?</span>
+    <span class="ai-chip" onclick="aiChip(this)">¿Qué documentos necesito para arrendar?</span>
+    <span class="ai-chip" onclick="aiChip(this)">¿Cuánto cuesta una comisión de venta?</span>
+  </div>
+  <div id="ai-inp-wrap">
+    <input class="fi" id="ai-input" placeholder="Pregunta sobre la inmobiliaria…"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiEnviar()}"/>
+    <button id="ai-send" onclick="aiEnviar()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="tov" id="tov"></div>
+<div id="tc" style="pointer-events:none"></div>
+
+<!-- ════ MODAL DETALLE INMUEBLE ════ -->
+<div class="mo-det" id="mo-det" onclick="if(event.target===this)cMdet()">
+  <div class="md-det">
+    <div class="det-img" id="det-img">
+      <div class="det-img-placeholder" id="det-img-ph">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <div class="det-badges" id="det-badges"></div>
+      <div class="det-price-badge" id="det-price"></div>
+    </div>
+    <div class="det-body">
+      <div class="det-title" id="det-title"></div>
+      <div class="det-loc" id="det-loc">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="det-loc-txt"></span>
+      </div>
+      <div class="det-stats">
+        <div class="det-stat"><div class="det-stat-v" id="det-hab">—</div><div class="det-stat-l"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M22 8v12M2 11h20M2 16h20M6 11V8a2 2 0 0 1 2-2h12"/></svg> Habitaciones</div></div>
+        <div class="det-stat"><div class="det-stat-v" id="det-ban">—</div><div class="det-stat-l"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6V4a2 2 0 0 1 2-2h2M3 10h18v5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z"/></svg> Baños</div></div>
+        <div class="det-stat"><div class="det-stat-v" id="det-area">—</div><div class="det-stat-l"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 14h7v7h-7zM10 7h11M7 10v11"/></svg> Área m²</div></div>
+        <div class="det-stat"><div class="det-stat-v" id="det-vis">—</div><div class="det-stat-l"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12"/><circle cx="12" cy="12" r="3"/></svg> Visitas</div></div>
+      </div>
+      <div class="det-info">
+        <div class="det-info-row"><div class="det-info-lbl">Tipo</div><div class="det-info-val" id="det-tipo"></div></div>
+        <div class="det-info-row"><div class="det-info-lbl">Finalidad</div><div class="det-info-val" id="det-fin"></div></div>
+        <div class="det-info-row"><div class="det-info-lbl">Estado</div><div class="det-info-val" id="det-est"></div></div>
+        <div class="det-info-row"><div class="det-info-lbl">Ciudad</div><div class="det-info-val" id="det-city"></div></div>
+        <div class="det-info-row"><div class="det-info-lbl">Zona</div><div class="det-info-val" id="det-zona"></div></div>
+        <div class="det-info-row"><div class="det-info-lbl">Código</div><div class="det-info-val mono" id="det-cod"></div></div>
+      </div>
+      <div class="det-asesor" id="det-asesor-box">
+        <div class="det-av"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><div style="font-weight:700;font-size:13px" id="det-asesor-nm">—</div><div style="font-size:11px;color:var(--t2)">Asesor asignado</div></div>
+      </div>
+    </div>
+    <div class="det-footer">
+      <button class="btn bs2" onclick="cMdet()">Cerrar</button>
+      <button class="btn bs2" id="det-fav-btn" onclick="detFav()" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        Favorito
+      </button>
+      <button class="btn bg2" onclick="cMdet();oM('mv')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Agendar Visita
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── URL del API: detecta automáticamente si corre desde Java o no ─────────────
+// Si el origen es localhost:8080 (servidor Java) usa URL relativa.
+// En cualquier otro caso (file://, Live Server, etc.) usa la URL absoluta del Java.
+const _javaOrigin = 'http://localhost:8080';
+const _isJava = location.origin === _javaOrigin || location.protocol === 'file:' ? false : (location.origin === _javaOrigin);
+const API = (location.origin === _javaOrigin) ? '/api' : _javaOrigin + '/api';
+
+let _serverOk = false; // true si el servidor Java está activo
+let _r='',_uid='',_ci='',_ai='';
+let _im=[],_cl=[],_as=[],_fv={},_mp={};
+
+// Imágenes de Unsplash por tipo de inmueble
+const IMG={
+  APARTAMENTO:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=70',
+  CASA:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=70',
+  LOCALCOMERCIAL:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=70',
+  OFICINA:'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=70',
+  LOTE:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=70',
+  BODEGA:'https://images.unsplash.com/photo-1565891741441-64926e441838?auto=format&fit=crop&w=600&q=70',
+};
+
+// ── Datos locales de demostración (activos siempre como fallback) ─────────────
+const LOCAL_USERS = {
+  'admin@proptech.co': {p:'admin123',rol:'admin',  id:'ADM-001',nombre:'Admin PropTech'},
+  'mario@gmail.com':   {p:'mar123',  rol:'cliente', id:'CLI-001',nombre:'Mario Restrepo'},
+  'sandra@gmail.com':  {p:'san123',  rol:'cliente', id:'CLI-002',nombre:'Sandra Vélez'},
+  'pedro@gmail.com':   {p:'ped123',  rol:'cliente', id:'CLI-003',nombre:'Pedro Salcedo'},
+  'ana@proptech.co':   {p:'ana123',  rol:'asesor',  id:'ASE-001',nombre:'Ana Martínez'},
+  'carlos@proptech.co':{p:'car123',  rol:'asesor',  id:'ASE-002',nombre:'Carlos Gómez'},
+  'lucia@proptech.co': {p:'luc123',  rol:'asesor',  id:'ASE-003',nombre:'Lucía Herrera'},
+};
+
+// Datos locales de inmuebles, clientes y asesores para modo offline
+const LOCAL_DATA = {
+  inmuebles:[
+    {codigo:'INM-001',direccion:'Cra 15 # 20-30',ciudad:'Armenia',zona:'Norte',tipo:'APARTAMENTO',finalidad:'VENTA',precio:280000000,area:85,habitaciones:3,banios:2,estado:'DISPONIBLE',visitas:2,asesorId:'ASE-001',asesorNombre:'Ana Martínez'},
+    {codigo:'INM-002',direccion:'Cl 25 # 10-50',ciudad:'Armenia',zona:'Sur',tipo:'CASA',finalidad:'ARRIENDO',precio:1800000,area:160,habitaciones:4,banios:3,estado:'DISPONIBLE',visitas:1,asesorId:'ASE-002',asesorNombre:'Carlos Gómez'},
+    {codigo:'INM-003',direccion:'Av Bolívar # 5-10',ciudad:'Calarcá',zona:'Centro',tipo:'LOCALCOMERCIAL',finalidad:'VENTA',precio:450000000,area:120,habitaciones:0,banios:2,estado:'DISPONIBLE',visitas:0,asesorId:'ASE-003',asesorNombre:'Lucía Herrera'},
+    {codigo:'INM-004',direccion:'Cll 10 # 8-20',ciudad:'Armenia',zona:'Sur',tipo:'APARTAMENTO',finalidad:'VENTA',precio:195000000,area:65,habitaciones:2,banios:1,estado:'DISPONIBLE',visitas:3,asesorId:'ASE-002',asesorNombre:'Carlos Gómez'},
+    {codigo:'INM-005',direccion:'Cra 20 # 30-15',ciudad:'Armenia',zona:'Norte',tipo:'CASA',finalidad:'VENTA',precio:380000000,area:210,habitaciones:5,banios:3,estado:'DISPONIBLE',visitas:1,asesorId:'ASE-001',asesorNombre:'Ana Martínez'},
+    {codigo:'INM-006',direccion:'Cl 5 # 12-40',ciudad:'Armenia',zona:'Industrial',tipo:'BODEGA',finalidad:'ARRIENDO',precio:2200000,area:300,habitaciones:0,banios:1,estado:'DISPONIBLE',visitas:0,asesorId:'ASE-003',asesorNombre:'Lucía Herrera'},
+    {codigo:'INM-007',direccion:'Torre 3 Piso 4',ciudad:'Armenia',zona:'Centro',tipo:'OFICINA',finalidad:'ARRIENDO',precio:1500000,area:50,habitaciones:0,banios:1,estado:'DISPONIBLE',visitas:0,asesorId:'ASE-001',asesorNombre:'Ana Martínez'},
+    {codigo:'INM-008',direccion:'Cra 8 # 15-30',ciudad:'Armenia',zona:'Norte',tipo:'APARTAMENTO',finalidad:'ARRIENDO',precio:950000,area:55,habitaciones:2,banios:1,estado:'ARRENDADO',visitas:5,asesorId:'ASE-002',asesorNombre:'Carlos Gómez'},
+  ],
+  clientes:[
+    {id:'CLI-001',nombre:'Mario Restrepo',correo:'mario@gmail.com',telefono:'300-111-1111',tipoCliente:'COMPRADOR',tipo:'COMPRADOR',presupuesto:350000000,zonasInteres:'Norte,Centro',estadoBusqueda:'BUSCANDO',favoritos:0,historialVisitas:1},
+    {id:'CLI-002',nombre:'Sandra Vélez',correo:'sandra@gmail.com',telefono:'300-222-2222',tipoCliente:'ARRENDATARIO',tipo:'ARRENDATARIO',presupuesto:2500000,zonasInteres:'Sur,Centro',estadoBusqueda:'BUSCANDO',favoritos:0,historialVisitas:1},
+    {id:'CLI-003',nombre:'Pedro Salcedo',correo:'pedro@gmail.com',telefono:'300-333-3333',tipoCliente:'INVERSIONISTA',tipo:'INVERSIONISTA',presupuesto:800000000,zonasInteres:'Industrial',estadoBusqueda:'BUSCANDO',favoritos:0,historialVisitas:0},
+  ],
+  asesores:[
+    {id:'ASE-001',nombre:'Ana Martínez',correo:'ana@proptech.co',telefono:'315-111-2222',zonaAsignada:'Norte',inmuebles:3,visitas:3,cierres:0,efectividad:0},
+    {id:'ASE-002',nombre:'Carlos Gómez',correo:'carlos@proptech.co',telefono:'315-333-4444',zonaAsignada:'Sur',inmuebles:3,visitas:3,cierres:1,efectividad:33.3},
+    {id:'ASE-003',nombre:'Lucía Herrera',correo:'lucia@proptech.co',telefono:'315-555-6666',zonaAsignada:'Centro',inmuebles:2,visitas:1,cierres:0,efectividad:0},
+  ],
+  visitas:{cola:[
+    {clienteNombre:'Mario Restrepo',clienteId:'CLI-001',inmuebleCod:'INM-001',asesorNombre:'Ana Martínez',fechayHora:'2026-05-14 10:00',estado:'PENDIENTE',observaciones:'Interesado en el precio'},
+    {clienteNombre:'Sandra Vélez',clienteId:'CLI-002',inmuebleCod:'INM-002',asesorNombre:'Carlos Gómez',fechayHora:'2026-05-15 15:00',estado:'CONFIRMADA',observaciones:'Busca casa familiar'},
+    {clienteNombre:'Pedro Salcedo',clienteId:'CLI-003',inmuebleCod:'INM-003',asesorNombre:'Lucía Herrera',fechayHora:'2026-05-16 09:00',estado:'REPROGRAMADA',observaciones:'Reprogramada por el cliente'},
+  ],todas:[
+    {clienteNombre:'Mario Restrepo',clienteId:'CLI-001',inmuebleCod:'INM-008',asesorNombre:'Ana Martínez',fechayHora:'2026-05-10 11:00',estado:'REALIZADA',observaciones:'Visita realizada con éxito'},
+    {clienteNombre:'Mario Restrepo',clienteId:'CLI-001',inmuebleCod:'INM-001',asesorNombre:'Ana Martínez',fechayHora:'2026-05-14 10:00',estado:'PENDIENTE',observaciones:'Interesado en el precio'},
+    {clienteNombre:'Sandra Vélez',clienteId:'CLI-002',inmuebleCod:'INM-004',asesorNombre:'Carlos Gómez',fechayHora:'2026-05-09 14:00',estado:'CANCELADA',observaciones:'El cliente canceló'},
+    {clienteNombre:'Sandra Vélez',clienteId:'CLI-002',inmuebleCod:'INM-002',asesorNombre:'Carlos Gómez',fechayHora:'2026-05-15 15:00',estado:'CONFIRMADA',observaciones:'Busca casa familiar'},
+    {clienteNombre:'Pedro Salcedo',clienteId:'CLI-003',inmuebleCod:'INM-003',asesorNombre:'Lucía Herrera',fechayHora:'2026-05-16 09:00',estado:'REPROGRAMADA',observaciones:'Reprogramada por el cliente'},
+  ]},
+  operaciones:[
+    {id:'OP-001',tipo:'ARRIENDO',estado:'ACTIVA',fecha:'2026-04-10',valor:950000,comision:3.5,inmuebleCodigo:'INM-008',clienteNombre:'Sandra Vélez',asesorNombre:'Carlos Gómez'},
+  ],
+  contratos:[
+    {id:'CT-001',tipo:'ARRIENDO',estado:'ACTIVO',fechaInicio:'2026-04-10',fechaFin:'2027-04-10',valorMensual:950000,inmuebleCodigo:'INM-008',clienteNombre:'Sandra Vélez'},
+  ],
+  alertas:{registro:[
+    {id:'ALT-001',mensaje:'Contrato CT-001 vence en menos de 60 días',nivel:'ALTA',tipo:'CONTRATO_PRONTO_VENCER',fecha:'2026-05-10 09:00',resuelta:false},
+    {id:'ALT-002',mensaje:'Inmueble INM-003 sin visitas en 30 días',nivel:'MEDIA',tipo:'INMUEBLE_SIN_ACTIVIDAD',fecha:'2026-05-10 09:00',resuelta:false},
+    {id:'ALT-003',mensaje:'Asesor Carlos Gómez tiene sobrecarga',nivel:'MEDIA',tipo:'SOBRECARGA_ASESOR',fecha:'2026-05-10 10:00',resuelta:false},
+  ]},
+  intenciones:[
+    {id:'INT-001',tipo:'COMPRA',estado:'ACTIVA',oferta:270000000,observaciones:'Precio negociable',fecha:'2026-05-08 14:00',inmuebleCodigo:'INM-001',inmuebleTipo:'APARTAMENTO',clienteNombre:'Mario Restrepo',clienteId:'CLI-001'},
+    {id:'INT-002',tipo:'ARRIENDO',estado:'ACTIVA',oferta:1700000,observaciones:'Interesada en el barrio',fecha:'2026-05-09 10:00',inmuebleCodigo:'INM-002',inmuebleTipo:'CASA',clienteNombre:'Sandra Vélez',clienteId:'CLI-002'},
+    {id:'INT-003',tipo:'COMPRA',estado:'ACTIVA',oferta:430000000,observaciones:'Inversión comercial',fecha:'2026-05-09 16:00',inmuebleCodigo:'INM-003',inmuebleTipo:'LOCALCOMERCIAL',clienteNombre:'Pedro Salcedo',clienteId:'CLI-003'},
+  ],
+  dashboard:{ok:true,totalInmuebles:8,totalClientes:3,totalAsesores:3,visitasPendientes:2,totalAlertas:3,totalOperaciones:1,totalContratos:1,valorPortafolio:1308450000},
+};
+LOCAL_DATA.visitas.todas=[...LOCAL_DATA.visitas.cola];
+
+let _rl='admin';
+
+function g(id){return document.getElementById(id)}
+function v(id){const e=g(id);return e?e.value.trim():''}
+
+// ── API: intenta servidor Java, si falla usa datos locales ─────────────────────
+async function api(path,method='GET',body=null){
+  if(_serverOk){
+    try{
+      const opts={method,headers:{'Content-Type':'application/json'}};
+      if(body)opts.body=JSON.stringify(body);
+      const ctrl=new AbortController();
+      const tm=setTimeout(()=>ctrl.abort(),4000);
+      const r=await fetch(API+path,opts,{signal:ctrl.signal});
+      clearTimeout(tm);
+      if(r.ok)return await r.json();
+    }catch(e){ _serverOk=false; setStat('off','Modo local'); }
+  }
+  return localApi(path,method,body);
+}
+
+// ── API local (sin servidor) ──────────────────────────────────────────────────
+function localApi(path,method,body){
+  const p=path.split('?')[0];
+  if(p==='/sesion/login'){
+    const c=body?.correo?.toLowerCase(),pw=body?.contrasenia;
+    const u=LOCAL_USERS[c];
+    if(u&&u.p===pw) return{ok:true,id:u.id,nombre:u.nombre,rol:u.rol,
+      clienteId:u.rol==='cliente'?u.id:'',asesorId:u.rol==='asesor'?u.id:''};
+    return{ok:false,error:'Credenciales incorrectas'};
+  }
+  if(p==='/sesion/logout')return{ok:true};
+  if(p==='/health')return{ok:true,status:'LOCAL'};
+  if(p==='/dashboard')return{...LOCAL_DATA.dashboard};
+  if(p==='/inmuebles')return{ok:true,data:LOCAL_DATA.inmuebles};
+  if(p==='/clientes')return{ok:true,data:LOCAL_DATA.clientes};
+  if(p==='/asesores')return{ok:true,data:LOCAL_DATA.asesores};
+  if(p==='/visitas')return{ok:true,...LOCAL_DATA.visitas};
+
+  if(p==='/visitas/atender')return{ok:true,msg:'Cola vacía en modo local'};
+  if(p==='/operaciones')return{ok:true,data:LOCAL_DATA.operaciones};
+  if(p==='/contratos')return{ok:true,data:LOCAL_DATA.contratos};
+  if(p==='/alertas')return{ok:true,...LOCAL_DATA.alertas,prioritaria:LOCAL_DATA.alertas.registro[0]||null};
+  if(p==='/alertas/detectar')return{ok:true,msg:'Detección completada'};
+  if(p==='/alertas/resolver')return{ok:true,msg:'Sin alertas en modo local'};
+  if(p==='/historial')return{ok:true,historial:[{tipo:'INICIO',descripcion:'Sistema iniciado en modo local',fecha:'2026-05-10 00:00'}]};
+  if(p==='/perfil')return{ok:true,id:_uid,nombre:g('up')?.textContent||'Usuario',correo:'—',telefono:'—',rol:_r};
+  if(p.startsWith('/filtrar')||p.startsWith('/recomendaciones')||p.startsWith('/cliente/portal')||p.startsWith('/asesor/portal')){
+    const q=new URLSearchParams(path.split('?')[1]||'');
+    if(p==='/cliente/portal'){
+      const cli=LOCAL_DATA.clientes.find(c=>c.id===q.get('clienteId'))||LOCAL_DATA.clientes[0];
+      const cliIntenciones=LOCAL_DATA.intenciones.filter(i=>i.clienteId===cli.id);
+      const cliVisitas=LOCAL_DATA.visitas.todas.filter(v=>v.clienteId===cli.id);
+      return{ok:true,cliente:cli,favoritos:[],historialVisitas:cliVisitas,recomendaciones:LOCAL_DATA.inmuebles.filter(i=>i.estado==='DISPONIBLE').slice(0,3),intenciones:cliIntenciones};
+    }
+    if(p==='/asesor/portal'){
+      const as=LOCAL_DATA.asesores.find(a=>a.id===q.get('asesorId'))||LOCAL_DATA.asesores[0];
+      return{ok:true,asesor:as,inmuebles:LOCAL_DATA.inmuebles.slice(0,3),visitas:LOCAL_DATA.visitas.cola,operaciones:[]};
+    }
+    return{ok:true,data:LOCAL_DATA.inmuebles.filter(i=>i.estado==='DISPONIBLE')};
+  }
+  if(p==='/ranking/zonas')return{ok:true,ranking:[{zona:'Norte',cantidad:3},{zona:'Sur',cantidad:2},{zona:'Centro',cantidad:2},{zona:'Industrial',cantidad:1}]};
+  if(p==='/ranking/asesores')return{ok:true,ranking:LOCAL_DATA.asesores};
+  if(p==='/comportamiento')return{ok:true,hallazgos:[]};
+  if(p.startsWith('/chat')){
+    if(p==='/chat/mensajes')return{ok:true,mensajes:window._localChat||[]};
+    if(p==='/chat/canales')return{ok:true,canales:[]};
+    if(p==='/chat/enviar')return{ok:true,msg:'Modo local: mensaje guardado temporalmente'};
+    return{ok:false,error:'Chat requiere servidor Java activo'};
+  }
+  if(p==='/intenciones'){
+    const cid=new URLSearchParams(path.split('?')[1]||'').get('clienteId');
+    if(cid) return{ok:true,data:LOCAL_DATA.intenciones.filter(i=>i.clienteId===cid)};
+    return{ok:true,data:LOCAL_DATA.intenciones};
+  }
+  if(p==='/ranking/inmuebles')return{ok:true,ranking:LOCAL_DATA.inmuebles.slice().sort((a,b)=>(b.visitas||0)-(a.visitas||0))};
+  if(p==='/inmuebles/editar')return{ok:true,msg:'Inmueble actualizado (modo local)'};
+  if(p==='/clientes/editar')return{ok:true,msg:'Cliente actualizado (modo local)'};
+  if(p==='/bst')return{ok:true,inorden:LOCAL_DATA.inmuebles.map(i=>i.precio).sort((a,b)=>a-b),altura:4,tamanio:8};
+  if(p==='/grafo')return{ok:true,nodos:['Norte','Sur','Centro','Industrial'],aristas:[{origen:'Norte',destino:'Centro',peso:5},{origen:'Sur',destino:'Centro',peso:4}]};
+  // POST: registro — devolver éxito ficticio
+  if(method==='POST'||method==='PUT'||method==='DELETE')return{ok:true,msg:'Operación registrada en modo local'};
+  return{ok:false,error:'Endpoint no disponible en modo local: '+path};
+}
+
+
+
+// ── Toast modal (estilo repositorio original) ─────────────────────────────────
+function tst(msg,t="info"){
+  const ic={ok:"✓",warn:"!",err:"✕",info:"i"},
+    tl={ok:"Éxito",warn:"Atención",err:"Error",info:"Información"},
+    cl={ok:"tok",warn:"twn",err:"ter",info:"tif"};
+  const ov=g("tov");g("tc").innerHTML="";
+  const el=document.createElement("div");
+  el.className="tst "+(cl[t]||"tif");
+  el.innerHTML=`<button class="tcl" onclick="cT()">×</button><div class="tbdy"><div class="tico">${ic[t]}</div><div><div class="ttl">${tl[t]}</div><div class="tmg">${msg}</div></div></div><div class="tac"><button class="tok2" onclick="cT()">Aceptar</button></div>`;
+  g("tc").appendChild(el);
+  requestAnimationFrame(()=>{ov.classList.add("on");el.classList.add("on");});
+  if(t==="ok"||t==="info")setTimeout(cT,3600);
+}
+function cT(){
+  const ov=g("tov"),tc=g("tc");
+  const el=tc.querySelector(".tst");
+  if(el)el.classList.remove("on");
+  ov.classList.remove("on");
+  setTimeout(()=>(tc.innerHTML=""),280);
+}
+
+// ── Estado del servidor ────────────────────────────────────────────────────
+function setStat(s,t){
+  const el=g('lstat');
+  el.className='lstat'+(s?' '+s:'');
+  g('lstxt').textContent=t;
+}
+async function chkBackend(){
+  if(location.protocol==='file:'){setStat('off','Modo local');return false;}
+  setStat('','Conectando…');
+  try{
+    const ctrl=new AbortController();
+    const tm=setTimeout(()=>ctrl.abort(),2000);
+    const r=await fetch(API+'/health',{signal:ctrl.signal});
+    clearTimeout(tm);
+    if(r&&r.ok){_serverOk=true;setStat('ok','Servidor conectado');return true;}
+  }catch(e){}
+  _serverOk=false;
+  setStat('off','Modo local');
+  return false;
+}
+
+// ── Login ──────────────────────────────────────────────────────────────────
+function srl(r,el){
+  _rl=r;
+  document.querySelectorAll('.rtb').forEach(t=>t.classList.remove('on'));
+  (el||document.querySelector('.rtb[data-role="'+r+'"]'))?.classList.add('on');
+  const H={admin:{c:'admin@proptech.co',p:'admin123'},cliente:{c:'mario@gmail.com',p:'mar123'},asesor:{c:'ana@proptech.co',p:'ana123'}};
+  g('lc').value=H[r]?.c||'';g('lp').value=H[r]?.p||'';
+  shErr('');
+  // Mostrar enlace de registro solo cuando el rol es cliente
+  const regLink=g('lreg-link');
+  if(regLink) regLink.style.display=(r==='cliente')?'block':'none';
+}
+function srlq(c,p,r){
+  srl(r);g('lc').value=c;g('lp').value=p;shErr('');
+}
+function tpw(){
+  const i=g('lp');i.type=i.type==='password'?'text':'password';
+}
+function shErr(msg){
+  const el=g('le');
+  if(!msg){el.classList.remove('on');el.textContent='';return;}
+  el.textContent=msg;el.classList.add('on');
+}
+
+// ── Registro de cliente desde el login ─────────────────────────────────────────
+function abrirRegistroCliente(){
+  const correo=g('lc')?.value?.trim();
+  if(correo&&g('reg-co')) g('reg-co').value=correo;
+  const err=g('reg-err');
+  if(err){err.classList.remove('on');err.textContent='';}
+  g('mreg').classList.add('on');
+}
+
+async function enviarRegistroCliente(){
+  const err=g('reg-err');
+  const mostrarErr=m=>{if(err){err.textContent=m;err.classList.add('on');}};
+  const id=g('reg-id')?.value?.trim();
+  const nm=g('reg-nm')?.value?.trim();
+  const co=g('reg-co')?.value?.trim().toLowerCase();
+  const pw=g('reg-pw')?.value;
+  const pr=g('reg-pr')?.value;
+
+  if(!id){mostrarErr('La identificación es obligatoria.');return;}
+  if(!nm){mostrarErr('El nombre es obligatorio.');return;}
+  if(!co||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(co)){mostrarErr('Ingresa un correo v\u00e1lido.');return;}
+  if(!pw||pw.length<4){mostrarErr('La contrase\u00f1a debe tener al menos 4 caracteres.');return;}
+  if(!pr||Number(pr)<=0){mostrarErr('Ingresa un presupuesto v\u00e1lido.');return;}
+
+  if(LOCAL_USERS[co]){mostrarErr('Este correo ya tiene cuenta. Inicia sesi\u00f3n directamente.');return;}
+
+  const btn=g('reg-btn');
+  if(btn){btn.disabled=true;btn.style.opacity='.7';}
+
+  const datos={
+    id,nombre:nm,correo:co,
+    telefono:g('reg-te')?.value?.trim()||'',
+    contrasenia:pw,
+    tipoCliente:g('reg-tp')?.value||'COMPRADOR',
+    presupuesto:pr,
+    zonasInteres:g('reg-zn')?.value?.trim()||'',
+    tipoDeseado:g('reg-ti')?.value||'',
+    minHabitaciones:g('reg-mh')?.value||'1',
+    estadoBusqueda:'BUSCANDO'
+  };
+
+  const r=await api('/clientes','POST',datos);
+  if(btn){btn.disabled=false;btn.style.opacity='';}
+
+  if(!r.ok){mostrarErr(r.error||'Error al registrar. Intenta de nuevo.');return;}
+
+  // Registrar en LOCAL_USERS para modo offline
+  LOCAL_USERS[co]={p:pw,rol:'cliente',id,nombre:nm};
+
+  cM('mreg');
+  tst('\u00a1Cuenta creada! Bienvenido, '+nm+'.','ok');
+  const cliId=r.data?.id||id;
+  // Auto-login
+  setTimeout(()=>oa(nm,'cliente',cliId,cliId,''),400);
+}
+
+async function lgn(){
+  const c=g('lc').value.trim().toLowerCase(),p=g('lp').value;
+  if(!c||!p){shErr('Ingresa correo y contraseña.');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c)){shErr('Formato de correo inválido.');return;}
+  const btn=g('lbtn');btn.classList.add('busy');shErr('');
+  // LOCAL_USERS tiene todos los usuarios demo: buscar inmediatamente sin red
+  const u=LOCAL_USERS[c];
+  if(u){
+    if(u.p!==p){btn.classList.remove('busy');shErr('Contraseña incorrecta.');return;}
+    if(_rl&&u.rol!==_rl){btn.classList.remove('busy');shErr('Esta cuenta es de tipo "'+u.rol+'". Selecciona la pestaña correcta.');return;}
+    btn.classList.remove('busy');
+    oa(u.nombre,u.rol,u.id,u.rol==='cliente'?u.id:'',u.rol==='asesor'?u.id:'');
+    return;
+  }
+  // Usuario no en lista local — intentar servidor Java
+  if(_serverOk){
+    try{
+      const r=await api('/sesion/login','POST',{correo:c,contrasenia:p});
+      if(r&&r.ok){
+        const rol=r.rol||_rl||'admin';
+        if(_rl&&rol!==_rl){btn.classList.remove('busy');shErr('Esta cuenta es de tipo "'+rol+'". Selecciona la pestaña correcta.');return;}
+        btn.classList.remove('busy');
+        oa(r.nombre,rol,r.id||'',r.clienteId||'',r.asesorId||'');
+        return;
+      }
+    }catch(e){}
+  }
+  btn.classList.remove('busy');
+  shErr('Credenciales no reconocidas. Usa una cuenta de demostración.');
+}
+async function lgo(){
+  // Cerrar conexiones SSE antes de salir
+  if(window._chatSSE){try{window._chatSSE.close();}catch(e){}window._chatSSE=null;}
+  if(window._chatStaffSSE){try{window._chatStaffSSE.close();}catch(e){}window._chatStaffSSE=null;}
+  window._chatCanalActivo='';
+  try{ await api('/sesion/logout','POST'); }catch(e){}
+  sessionStorage.removeItem('pt_sesion');
+  g('app').style.display='none';g('lw').style.display='flex';
+  _r='';_uid='';_ci='';_ai='';
+}
+
+function oa(nm,rol,uid,ci,ai){
+  _r=rol;_uid=uid;
+  _ci=rol==='cliente'?uid:ci;
+  _ai=rol==='asesor'?uid:ai;
+  // Guardar sesión para sobrevivir recargas
+  sessionStorage.setItem('pt_sesion',JSON.stringify({nm,rol,uid,ci,ai}));
+  g('lw').style.display='none';g('app').style.display='flex';
+  g('up').textContent=nm;
+  bn(rol);srb(rol);la(rol);
+  tst('Bienvenido, '+nm,'ok');
+}
+
+/** Restaurar sesión guardada (al recargar la página) */
+function restaurarSesion(){
+  try{
+    const s=sessionStorage.getItem('pt_sesion');
+    if(!s)return false;
+    const {nm,rol,uid,ci,ai}=JSON.parse(s);
+    if(!nm||!rol)return false;
+    _r=rol;_uid=uid;
+    _ci=rol==='cliente'?uid:ci;
+    _ai=rol==='asesor'?uid:ai;
+    g('lw').style.display='none';g('app').style.display='flex';
+    g('up').textContent=nm;
+    bn(rol);srb(rol);la(rol);
+    return true;
+  }catch(e){ sessionStorage.removeItem('pt_sesion'); return false; }
+}
+
+// ── Navegación ─────────────────────────────────────────────────────────────
+const TT={dashboard:'Dashboard','dash-cliente':'Mi Panel','dash-asesor':'Mi Panel',catalogo:'Catálogo de Inmuebles',clientes:'Clientes',asesores:'Asesores',visitas:'Visitas',operaciones:'Operaciones',contratos:'Contratos',alertas:'Alertas',recomendaciones:'Recomendaciones',intenciones:'Intenciones',comportamiento:'Comportamiento Comercial',reportes:'Reportes',perfil:'Mi Perfil',chat:'Chat de Dudas'};
+const NV={
+  admin:[{s:'Principal'},{p:'dashboard',l:'Dashboard'},{s:'Gestión'},{p:'catalogo',l:'Inmuebles'},{p:'clientes',l:'Clientes'},{p:'asesores',l:'Asesores'},{s:'Operaciones'},{p:'visitas',l:'Visitas'},{p:'operaciones',l:'Operaciones'},{p:'contratos',l:'Contratos'},{s:'Inteligencia'},{p:'alertas',l:'Alertas'},{p:'recomendaciones',l:'Recomendaciones'},{p:'intenciones',l:'Intenciones'},{p:'comportamiento',l:'Comportamiento'},{p:'reportes',l:'Reportes'},{s:'Comunicación'},{p:'chat',l:'Chat de Dudas'},{s:'Cuenta'},{p:'perfil',l:'Mi Perfil'}],
+  cliente:[{s:'Inicio'},{p:'dash-cliente',l:'Mi Panel'},{s:'Catálogo'},{p:'catalogo',l:'Ver Inmuebles'},{p:'recomendaciones',l:'Recomendaciones'},{s:'Mis Acciones'},{p:'visitas',l:'Mis Visitas'},{p:'intenciones',l:'Mis Intenciones'},{s:'Soporte'},{p:'chat',l:'Chat de Dudas'},{s:'Cuenta'},{p:'perfil',l:'Mi Perfil'}],
+  asesor:[{s:'Inicio'},{p:'dash-asesor',l:'Mi Panel'},{s:'Trabajo'},{p:'catalogo',l:'Inmuebles'},{p:'visitas',l:'Visitas'},{p:'operaciones',l:'Operaciones'},{s:'Análisis'},{p:'comportamiento',l:'Comportamiento'},{s:'Comunicación'},{p:'chat',l:'Chat de Dudas'},{s:'Cuenta'},{p:'perfil',l:'Mi Perfil'}]
+};
+const IC={
+  dashboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+  "dash-cliente":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+  "dash-asesor":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  catalogo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>',
+  clientes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  asesores:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  visitas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  operaciones:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 0 0 1.4 0l4-4M21 11V5a1 1 0 0 0-1-1h-3.5l-3.6 3.6M3 13V7a1 1 0 0 1 1-1h3.5l3.5 3.5"/></svg>',
+  contratos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+  alertas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+  recomendaciones:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',
+  intenciones:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  comportamiento:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 14l4-4 4 4 5-5"/></svg>',
+  reportes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h2v5M12 11v7M16 15v3"/></svg>',
+  perfil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+};
+
+function bn(rol){
+  const items=NV[rol]||NV.admin;
+  g('nm').innerHTML=items.map(x=>x.s?`<div class="ns">${x.s}</div>`:`<div class="ni" id="ni-${x.p}" onclick="go('${x.p}')">${IC[x.p]||''} ${x.l}</div>`).join('');
+  const b=g('breg');if(b)b.style.display=rol==='admin'?'':'none';
+}
+function srb(rol){
+  const C={admin:{c:'ra',t:'Administrador'},cliente:{c:'rc',t:'Cliente'},asesor:{c:'re',t:'Asesor'}};
+  const d=C[rol]||C.admin;
+  const el=g('rbd');el.className='rbd '+d.c;el.textContent=d.t;
+}
+function go(pg){
+  document.querySelectorAll('.pg2').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  const p=g('pg-'+pg);if(p)p.classList.add('on');
+  const ni=g('ni-'+pg);if(ni)ni.classList.add('on');
+  g('pgt').textContent=TT[pg]||pg;
+  const LD={dashboard:ldd,'dash-cliente':ldc,'dash-asesor':lda2,catalogo:ldi,clientes:ldcl,asesores:ldas,visitas:ldv,operaciones:ldo,contratos:ldct,alertas:lda,recomendaciones:ldRec,intenciones:ldt,comportamiento:ldcm,reportes:ldr,perfil:ldp,chat:ldChat};
+  LD[pg]&&LD[pg]();
+}
+function la(rol){
+  ldi();ldcl();ldas();
+  if(rol==='admin')ldd();
+  else if(rol==='cliente')go('dash-cliente');
+  else if(rol==='asesor')go('dash-asesor');
+}
+
+// ── Formateo ───────────────────────────────────────────────────────────────
+function fp(v){if(!v&&v!==0)return'—';return new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v)}
+function bd(s){
+  const M={
+    // Inmuebles
+    DISPONIBLE:'bo',ARRENDADO:'bi',VENDIDO:'br',RESERVADO:'bw',
+    // Visitas — 5 estados del PDF
+    PENDIENTE:'bw',       // naranja/amarillo
+    CONFIRMADA:'bi',      // azul
+    REALIZADA:'bk',       // verde
+    CANCELADA:'br',       // rojo
+    REPROGRAMADA:'bp',    // morado/bronce
+    // Operaciones / contratos
+    ACTIVA:'bo',CERRADA:'bk',CANCELADA_OP:'br',
+    EN_PROCESO:'bi',COMPLETADA:'bk',
+    // Alertas
+    ALTA:'br',MEDIA:'bw',BAJA:'bi',CRITICA:'br',
+    // Tipos
+    VENTA:'bt',ARRIENDO:'bi',RENOVACION:'bk',CANCELACION_NEGOCIO:'br',
+    // Clientes
+    COMPRADOR:'bi',ARRENDATARIO:'bp',INVERSIONISTA:'bt',
+    ACTIVO:'bo',BUSCANDO:'bo',EN_PROCESO_CLI:'bi',CERRADO_CLI:'bk',
+    // Intenciones
+    COMPRA:'bo',ACTIVA_INT:'bo',CONCRETADA:'bk',DESCARTADA:'br',
+  };
+  return`<span class="bdg ${M[s]||'bk'}">${s}</span>`;
+}
+function is(i){
+  if(_mp[i.codigo])return _mp[i.codigo];
+  if(IMG[i.tipo])return IMG[i.tipo];
+  return null;
+}
+function tipoSvg(tipo){
+  const M={
+    APARTAMENTO:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    CASA:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+    LOCALCOMERCIAL:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/><path d="M1 3h22v4H1z"/></svg>',
+    OFICINA:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01"/></svg>',
+    LOTE:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 22.1L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c9 0 16-8 16-16z"/></svg>',
+    BODEGA:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/></svg>',
+  };
+  return M[tipo]||M.APARTAMENTO;
+}
+
+// ── Llenar selectores ───────────────────────────────────────────────────────
+function fsl(){
+  function fl(id,items,vf,tf){
+    const el=g(id);if(!el)return;
+    el.innerHTML='<option value="">— Seleccionar —</option>';
+    items.forEach(i=>{const o=document.createElement('option');o.value=vf(i);o.textContent=tf(i);el.appendChild(o);});
+  }
+  fl('ias',_as,a=>a.id,a=>a.nombre);
+  fl('vcl',_cl,c=>c.id,c=>c.nombre);
+  fl('vin',_im,i=>i.codigo,i=>i.codigo+' – '+i.tipo);
+  fl('vas',_as,a=>a.id,a=>a.nombre);
+  fl('oin',_im,i=>i.codigo,i=>i.codigo+' – '+i.tipo);
+  fl('ocl',_cl,c=>c.id,c=>c.nombre);
+  fl('oas',_as,a=>a.id,a=>a.nombre);
+  fl('ctin',_im,i=>i.codigo,i=>i.codigo+' – '+i.tipo);
+  fl('ctcl',_cl,c=>c.id,c=>c.nombre);
+  fl('rccli',_cl,c=>c.id,c=>c.nombre+' ('+c.tipo+')');
+}
+
+// ── Dashboard Admin ─────────────────────────────────────────────────────────
+async function ldd(){
+  const r=await api('/dashboard');
+  if(!r.ok){tst(r.error,'err');return;}
+  [['s1',r.totalInmuebles||r.inmuebles||0],['s2',r.totalClientes||r.clientes||0],
+   ['s3',r.totalAsesores||r.asesores||0],['s4',r.visitasPendientes||r.visitas||0],
+   ['s5',r.totalAlertas||r.alertas||0],['s6',r.totalOperaciones||r.operaciones||0]
+  ].forEach(([id,val])=>{ const e=g(id);if(e)e.textContent=val;});
+
+  const rv=await api('/visitas');
+  if(rv.ok){
+    const c=rv.cola||[];
+    g('dv').innerHTML=c.length?c.slice(0,4).map((x,i)=>`<div class="vqi ${i===0?'fx':''}"><div class="vqn">${i+1}</div><div style="flex:1"><div style="font-weight:600;font-size:13px">${x.clienteNombre||'?'}</div><div style="font-size:11px;color:var(--t2)">${x.inmuebleCod||'?'} · ${x.asesorNombre||'?'} · ${x.fechayHora||'—'}</div></div>${bd(x.estado)}</div>`).join('')
+    :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas pendientes</div></div>';
+  }
+  const ra=await api('/alertas');
+  if(ra.ok){
+    const c=ra.registro||[];
+    g('da').innerHTML=c.length?c.filter(a=>!a.resuelta).slice(0,4).map(a=>`<div class="ai ${a.nivel==='ALTA'||a.nivel==='CRITICA'?'aa':a.nivel==='MEDIA'?'am':'ab'}"><div class="ad"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">${a.mensaje}</div><div style="font-size:11px;color:var(--t3)">${a.tipo||''} · ${a.fecha||''}</div></div>${bd(a.nivel||'MEDIA')}</div>`).join('')
+    :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><div class="et">Sin alertas</div></div>';
+  }
+  const rh=await api('/historial');
+  if(rh.ok){
+    const l=rh.historial||[];
+    g('dh').innerHTML=l.length?l.slice(0,5).map(a=>`<div class="hr"><div class="hd"></div><div style="flex:1;font-size:13px">${a.descripcion||a.tipo}</div><div style="font-size:11px;color:var(--t3);font-family:'JetBrains Mono',monospace">${(a.fecha||'').slice(0,16)}</div></div>`).join('')
+    :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div class="et">Sin acciones</div></div>';
+  }
+  const ro=await api('/operaciones');
+  if(ro.ok){
+    const ops=(ro.data||[]).slice(-4).reverse();
+    g('do').innerHTML=ops.length?ops.map(o=>`<div class="hr"><div class="hd" style="background:var(--terra)"></div><div style="flex:1;font-size:13px">${o.tipo} · ${o.inmuebleCodigo||'?'} · ${o.clienteNombre||'?'}</div><div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--green)">${fp(o.valor)}</div></div>`).join('')
+    :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div class="et">Sin operaciones</div></div>';
+  }
+}
+
+// ── Dashboard Cliente ────────────────────────────────────────────────────────
+async function ldc(){
+  if(!_ci){tst('No se pudo identificar al cliente','err');return;}
+  const r=await api('/cliente/portal?clienteId='+_ci);
+  if(!r.ok){tst(r.error||'Error al cargar panel','err');return;}
+  const cl=r.cliente||{};
+  g('cbv').textContent='Bienvenido, '+(cl.nombre||'Cliente')+'.';
+  const favs=r.favoritos||[];
+  g('cfcnt').textContent=favs.length;
+  g('cfav').innerHTML=favs.length?favs.map(i=>`<div class="ri"><div style="margin-right:8px;opacity:.6">${tipoSvg(i.tipo)}</div><div><div style="font-weight:700;font-size:13px">${i.codigo} — ${i.tipo}</div><div style="font-size:11px;color:var(--t2)">${i.direccion}</div></div><div class="rsc">${fp(i.precio)}</div></div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div class="et">Sin favoritos. Explora el catálogo.</div></div>';
+  const vis=r.historialVisitas||[];
+  g('cvis').innerHTML=vis.length?vis.map(x=>`<div class="hr"><div class="hd" style="background:var(--info)"></div><div style="flex:1;font-size:13px">${x.inmuebleCod||'?'} · ${x.fechayHora||'—'}</div>${bd(x.estado)}</div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas</div></div>';
+  const recs=r.recomendaciones||[];
+  g('crec').innerHTML=recs.length?`<div class="pgd">${recs.map(i=>pc(i)).join('')}</div>`
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="et">Completa tu perfil para recomendaciones</div></div>';
+}
+
+// ── Dashboard Asesor ─────────────────────────────────────────────────────────
+async function lda2(){
+  if(!_ai){tst('No se pudo identificar al asesor','err');return;}
+  const r=await api('/asesor/portal?asesorId='+_ai);
+  if(!r.ok){tst(r.error||'Error al cargar panel','err');return;}
+  const ae=r.asesor||{};
+  g('abv').textContent='Bienvenido, '+(ae.nombre||'Asesor')+'.';
+  g('ainms').innerHTML=inms.length?`<div class="pgd">${inms.map(i=>pc(i)).join('')}</div>`
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div class="et">Sin inmuebles asignados</div></div>';
+  const vis=r.visitas||[];
+  g('avis').innerHTML=vis.length?vis.map(x=>`<div class="vqi ${x.estado==='PENDIENTE'?'fx':''}"><div class="vqn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div style="flex:1"><div style="font-weight:600;font-size:13px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg> ${x.clienteNombre||'?'} / ${x.inmuebleCod||'?'}</div><div style="font-size:11px;color:var(--t2)">${x.fechayHora||'—'}</div></div>${bd(x.estado)}</div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="et">Sin visitas</div></div>';
+  const ops=r.operaciones||[];
+  g('aops').innerHTML=ops.length?ops.map(o=>`<tr><td class="mono" style="color:var(--info)">${o.id}</td><td>${bd(o.tipo)}</td><td>${o.inmuebleCodigo||'?'}</td><td>${o.clienteNombre||'?'}</td><td class="mono">${fp(o.valor)}</td><td>${bd(o.estado)}</td></tr>`).join('')
+  :'<tr><td colspan="6"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div class="et">Sin operaciones</div></div></td></tr>';
+}
+
+// ── Catálogo ─────────────────────────────────────────────────────────────────
+async function ldi(){
+  const r=await api('/inmuebles');
+  if(!r.ok){tst(r.error,'err');return;}
+  _im=r.data||[];
+  rg(_im);rt(_im);
+  fsl();
+}
+
+function pc(i){
+  // Prioridad: foto subida manualmente (_mp) > fotoUrl del servidor > Unsplash por tipo
+  const imgSrc=_mp[i.codigo]||(i.fotoUrl&&i.fotoUrl.trim()?i.fotoUrl:null)||IMG[i.tipo]||null;
+  const favHrt=_fv[i.codigo]
+    ?`<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--err)" stroke="var(--err)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>`
+    :`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>`;
+  const cimg=imgSrc?`<img src="${imgSrc}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()"/>`:''
+  const btnFoto=_r==='admin'?`<button onclick="event.stopPropagation();abrirFotoInmueble('${i.codigo}')" style="position:absolute;bottom:9px;right:9px;z-index:3;background:rgba(255,255,255,.88);border:none;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;color:var(--ink)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Foto</button>`:'';
+  return `<div class="pc" onclick="abrirDetalle('${i.codigo}')" id="pc-${i.codigo}">
+    <div class="pi" style="position:relative">
+      ${cimg}
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.06),transparent 35%,transparent 60%,rgba(0,0,0,.15));z-index:1"></div>
+      <span class="pitp" style="position:relative;z-index:2">${i.tipo}</span>
+      <span class="pifn ${i.finalidad==='VENTA'?'vt':''}" style="position:relative;z-index:2">${i.finalidad}</span>
+      ${!cimg?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.25">${tipoSvg(i.tipo)}</div>`:''}
+      ${btnFoto}
+    </div>
+    <div class="pcb">
+      <div class="pcz">${i.zona||''} · ${i.ciudad}</div>
+      <div class="ppr">${fp(i.precio)}</div>
+      <div class="pad">${i.direccion}</div>
+      <div class="pmt">
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M22 8v12M2 11h20M2 16h20M6 11V8a2 2 0 0 1 2-2h12"/></svg> ${i.habitaciones}</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6V4a2 2 0 0 1 2-2h2M3 10h18v5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z"/></svg> ${i.banios}</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 14h7v7h-7zM10 7h11M7 10v11"/></svg> ${i.area}m²</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12"/><circle cx="12" cy="12" r="3"/></svg> ${i.visitas||0}</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        ${bd(i.estado)}
+        ${_r==='cliente'||_r==='admin'?`<button class="btn bs2 bxs" onclick="event.stopPropagation();tfav('${i.codigo}')" style="display:flex;align-items:center;gap:4px">${favHrt}</button>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+
+// ── Abrir modal de detalle de inmueble ────────────────────────────────────────
+let _detCod='';
+function abrirDetalle(cod){
+  const i=_im.find(x=>x.codigo===cod);
+  if(!i)return;
+  _detCod=cod;
+  // imagen
+  const imgEl=g('det-img');
+  const ph=g('det-img-ph');
+  const imgSrc=is(i);
+  // limpiar imgs previas
+  imgEl.querySelectorAll('img').forEach(el=>el.remove());
+  if(imgSrc){
+    const img=document.createElement('img');
+    img.src=imgSrc;img.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
+    img.onerror=()=>img.remove();
+    imgEl.insertBefore(img,imgEl.firstChild);
+    ph.style.display='none';
+  } else { ph.style.display='flex'; }
+  // badges
+  g('det-badges').innerHTML=`<span class="pitp">${i.tipo}</span><span class="pifn ${i.finalidad==='VENTA'?'vt':''}">${i.finalidad}</span>`;
+  g('det-price').textContent=fp(i.precio);
+  g('det-title').textContent=i.tipo+' — '+i.zona;
+  g('det-loc-txt').textContent=i.direccion+', '+i.ciudad;
+  g('det-hab').textContent=i.habitaciones;
+  g('det-ban').textContent=i.banios;
+  g('det-area').textContent=i.area;
+  g('det-vis').textContent=i.visitas||0;
+  g('det-tipo').innerHTML=bd(i.tipo);
+  g('det-fin').innerHTML=bd(i.finalidad);
+  g('det-est').innerHTML=bd(i.estado);
+  g('det-city').textContent=i.ciudad;
+  g('det-zona').textContent=i.zona||'—';
+  g('det-cod').textContent=i.codigo;
+  g('det-asesor-nm').textContent=i.asesorNombre||'Sin asignar';
+  // botón favorito solo para clientes
+  const fb=g('det-fav-btn');
+  if(fb) fb.style.display=(_r==='cliente')?'':'none';
+  g('mo-det').classList.add('on');
+}
+function cMdet(){ g('mo-det').classList.remove('on'); _detCod=''; }
+function detFav(){
+  if(_detCod) tfav(_detCod);
+}
+
+function rg(inms){
+  const cont=g('pgd')||g('tgd');
+  if(!cont)return;
+  if(!inms.length){
+    const b=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
+    cont.innerHTML=`<div class="emp"><div class="ei svg-ei">${b}</div><div class="et">Sin inmuebles</div></div>`;
+    return;
+  }
+  cont.innerHTML=inms.map(pc).join('');
+}
+function rt(inms){
+  const el=g('tbi');if(!el)return;
+  if(!inms.length){el.innerHTML='<tr><td colspan="9"><div class="emp"><div class="et">Sin inmuebles</div></div></td></tr>';return;}
+  el.innerHTML=inms.map(i=>`<tr style="cursor:pointer" onclick="abrirDetalle('${i.codigo}')"><td class="mono" style="color:var(--info)">${i.codigo}</td><td>${i.tipo}</td><td style="max-width:200px;font-size:12px">${i.direccion} / ${i.ciudad}</td><td class="mono" style="color:var(--terra)">${fp(i.precio)}</td><td>${i.habitaciones}</td><td>${bd(i.estado)}</td><td>${bd(i.finalidad)}</td><td style="font-size:12px">${i.asesorNombre||'—'}</td><td onclick="event.stopPropagation()" style="display:flex;gap:4px">${_r==='admin'?`<button class="btn bs2 bxs" onclick="abrirEditar('${i.codigo}')">Editar</button>`:''}${_r==='admin'?`<button class="btn be2 bxs" onclick="eli('${i.codigo}')">Eliminar</button>`:''}</td></tr>`).join('');
+}
+
+
+function tv(m){
+  g('tig').style.display=m==='grid'?'':'none';
+  g('tit').style.display=m==='table'?'':'none';
+  g('tif').style.display=m==='filter'?'':'none';
+}
+
+async function vi(cod){
+  const inm=_im.find(i=>i.codigo===cod);
+  if(!inm)return;
+  alert(`${inm.codigo} — ${inm.tipo}\n${inm.direccion}, ${inm.ciudad}\nZona: ${inm.zona}\nPrecio: ${fp(inm.precio)}\nÁrea: ${inm.area}m² | ${inm.habitaciones} hab. | ${inm.banios} baños\nEstado: ${inm.estado} | ${inm.finalidad}\nAsesor: ${inm.asesorNombre||'—'}`);
+}
+
+async function del(cod){
+  if(!confirm('¿Eliminar inmueble '+cod+'?'))return;
+  const r=await fetch(API+'/inmuebles/'+cod,{method:'DELETE'});
+  const d=await r.json();
+  if(d.ok){tst('Inmueble eliminado','warn');ldi();}else tst(d.error,'err');
+}
+
+async function rgi(){
+  const d={codigo:v('icd'),direccion:v('idir'),ciudad:v('ici'),zona:v('izn'),tipo:v('itp'),finalidad:v('ifn'),precio:v('ipr'),area:v('iar'),habitaciones:v('ihb'),banios:v('ibn'),estado:v('ies'),asesorId:v('ias')};
+  if(!d.codigo||!d.direccion){tst('Código y dirección obligatorios','err');return;}
+  const r=await api('/inmuebles','POST',d);
+  if(r.ok){
+    cM('mi');
+    await guardarFotoInmueble(d.codigo); // guardar foto si se seleccionó
+    tst('Inmueble registrado','ok');
+    ldi();
+  } else tst(r.error,'err');
+}
+
+async function tfav(cod){
+  if(!_ci){tst('Debes iniciar sesión como cliente','err');return;}
+  await api('/favoritos?clienteId='+_ci+'&inmCodigo='+cod,'GET');
+  _fv[cod]=!_fv[cod];
+  ldi();
+  tst(_fv[cod]?'Agregado a favoritos':'Eliminado de favoritos',_fv[cod]?'ok':'warn');
+}
+
+async function fil(){
+  const p=new URLSearchParams({tipo:v('ftp2'),finalidad:v('ffn2'),precioMin:v('fpn'),precioMax:v('fpx'),minHab:v('fhb')});
+  const r=await api('/filtrar?'+p);
+  const inms=r.data||[];
+  g('frs').innerHTML=inms.length?`<div class="pgd">${inms.map(pc).join('')}</div>`:'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div><div class="et">Sin resultados</div></div>';
+}
+
+function gsr(q){
+  if(!q){rg(_im);return;}
+  const ql=q.toLowerCase();
+  const f=_im.filter(i=>(i.codigo+i.tipo+i.zona+i.direccion+i.finalidad+i.asesorNombre).toLowerCase().includes(ql));
+  rg(f);
+}
+
+// ── Clientes ──────────────────────────────────────────────────────────────────
+async function ldcl(){
+  const r=await api('/clientes');if(!r.ok)return;
+  _cl=r.data||[];
+  g('tbc').innerHTML=_cl.length?_cl.map(c=>`<tr><td class="mono" style="color:var(--info)">${c.id}</td><td style="font-weight:600">${c.nombre}</td><td>${bd(c.tipo||c.tipoCliente||'')}</td><td style="font-size:12px">${c.correo}</td><td class="mono" style="color:var(--terra)">${fp(c.presupuesto)}</td><td>${c.zonasInteres||'—'}</td><td>${bd(c.estadoBusqueda||'BUSCANDO')}</td><td>${c.favoritos||0}</td><td style="display:flex;gap:4px">${_r==='admin'?`<button class="btn bs2 bxs" onclick="abrirEditarCliente('${c.id}')">Editar</button>`:''}<button class="btn be2 bxs" onclick="delc('${c.id}')">Eliminar</button></td></tr>`).join('')
+  :'<tr><td colspan="8"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="et">Sin clientes</div></div></td></tr>';
+  fsl();
+}
+
+async function delc(id){
+  if(!confirm('¿Eliminar cliente '+id+'?'))return;
+  const r=await fetch(API+'/clientes/'+id,{method:'DELETE'});
+  const d=await r.json();
+  if(d.ok){tst('Cliente eliminado','warn');ldcl();}else tst(d.error,'err');
+}
+
+async function rgc(){
+  const d={id:v('cid'),nombre:v('cnm'),correo:v('ccr'),telefono:v('cte'),contrasenia:v('cpw'),tipo:v('ctp'),presupuesto:v('cpr'),zonasInteres:v('czn'),tipoDeseado:v('cti'),minHabitaciones:v('chb')};
+  if(!d.id||!d.nombre){tst('ID y nombre obligatorios','err');return;}
+  const r=await api('/clientes','POST',d);
+  if(r.ok){cM('mc');tst('Cliente registrado','ok');ldcl();}else tst(r.error,'err');
+}
+
+// ── Asesores ──────────────────────────────────────────────────────────────────
+async function ldas(){
+  const r=await api('/asesores');if(!r.ok)return;
+  _as=r.data||[];
+  g('tba').innerHTML=_as.length?_as.map(a=>`<tr><td class="mono" style="color:var(--info)">${a.id}</td><td style="font-weight:600">${a.nombre}</td><td>${a.zonaAsignada||'—'}</td><td style="font-size:11px">${a.correo}</td><td>${a.inmuebles||0}</td><td>${a.visitas||0}</td><td><strong style="color:var(--terra)">${a.cierres||0}</strong></td><td>${a.efectividad||0}%</td><td><button class="btn bs2 bxs" onclick="ain('${a.id}')">+Inmueble</button></td></tr>`).join('')
+  :'<tr><td colspan="9"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="et">Sin asesores</div></div></td></tr>';
+  fsl();
+}
+
+async function rga(){
+  const d={id:v('aid'),nombre:v('anm'),correo:v('acr'),telefono:v('ate'),zonaAsignada:v('azn'),contrasenia:v('apw')};
+  if(!d.id||!d.nombre){tst('ID y nombre obligatorios','err');return;}
+  const r=await api('/asesores','POST',d);
+  if(r.ok){cM('ma');tst('Asesor registrado','ok');ldas();}else tst(r.error,'err');
+}
+
+async function ain(aid){
+  const cod=prompt('Código del inmueble:');if(!cod)return;
+  const r=await api('/asesores/asignar','POST',{asesorId:aid,inmuebleCodigo:cod});
+  tst(r.ok?'Inmueble asignado':r.error,r.ok?'ok':'err');
+  ldas();
+}
+
+// ── Visitas ────────────────────────────────────────────────────────────────────
+async function ldv(){
+  // Mostrar/ocultar paneles según rol
+  const esCliente = _r === 'cliente';
+  const elAdmin = g('vis-admin'), elCli = g('vis-cliente');
+  if(elAdmin) elAdmin.style.display = esCliente ? 'none' : '';
+  if(elCli)   elCli.style.display   = esCliente ? '' : 'none';
+
+  // Color por estado (5 estados del PDF)
+  const colorEstado = {
+    PENDIENTE:   'var(--warn)',
+    CONFIRMADA:  'var(--info)',
+    REALIZADA:   'var(--ok)',
+    CANCELADA:   'var(--err)',
+    REPROGRAMADA:'#7850a0',
+  };
+
+  if(esCliente){
+    // CLIENTE: solo sus visitas
+    if(!_ci) return;
+    const r = await api('/cliente/portal?clienteId='+_ci);
+    const vis = r.historialVisitas||[];
+    const elv = g('vt-cli');
+    if(!elv) return;
+    elv.innerHTML = vis.length
+      ? vis.map(x=>`
+        <div class="vqi ${x.estado==='PENDIENTE'?'fx':''}">
+          <div style="width:9px;height:9px;border-radius:50%;flex-shrink:0;background:${colorEstado[x.estado]||'var(--t3)'}"></div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:13px">${x.inmuebleCod||'?'}</div>
+            <div style="font-size:11px;color:var(--t2)">${x.asesorNombre||'—'} · ${(x.fechayHora||'').slice(0,16)}</div>
+            ${x.observaciones?`<div style="font-size:11px;color:var(--t3);margin-top:2px">${x.observaciones}</div>`:''}
+          </div>
+          ${bd(x.estado)}
+        </div>`).join('')
+      : '<div class="emp"><div class="et">No tienes visitas agendadas aún.<br>Puedes agendar una desde el catálogo de inmuebles.</div></div>';
+    return;
+  }
+
+  // ADMIN / ASESOR: cola FIFO + tabla completa
+  const r = await api('/visitas'); if(!r.ok) return;
+  const cola = r.cola||[], todas = r.todas||[];
+
+  const vqEl = g('vq');
+  if(vqEl) vqEl.innerHTML = cola.length
+    ? cola.map((x,i)=>`
+      <div class="vqi ${x.estado==='PENDIENTE'?'fx':''}">
+        <div class="vqn">${i+1}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:13px">${x.clienteNombre||'?'} / ${x.inmuebleCod||'?'}</div>
+          <div style="font-size:11px;color:var(--t2)">${(x.fechayHora||'').slice(0,16)} · ${x.asesorNombre||'?'}</div>
+        </div>
+        ${bd(x.estado)}
+        ${i===0?`<button class="btn bg2 bxs" onclick="atv()">Atender</button>`:''}
+      </div>`).join('')
+    : '<div class="emp"><div class="et">Cola vacía</div></div>';
+
+  const tbv = g('tbv');
+  if(tbv) tbv.innerHTML = todas.length
+    ? todas.map(x=>`<tr>
+        <td>${x.clienteNombre||'?'}</td>
+        <td>${x.inmuebleCod||'?'}</td>
+        <td style="font-size:12px">${x.asesorNombre||'?'}</td>
+        <td class="mono" style="font-size:11px">${(x.fechayHora||'').slice(0,16)}</td>
+        <td>${bd(x.estado)}</td>
+        <td style="font-size:11px;color:var(--t2)">${x.observaciones||'—'}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="6"><div class="emp"><div class="et">Sin visitas</div></div></td></tr>';
+}
+
+
+async function atv(){
+  const r=await api('/visitas/atender','POST');
+  if(r.ok){tst('Visita atendida','ok');ldv();if(_r==='admin')ldd();}
+  else tst(r.msg||r.error,'info');
+}
+
+async function rgv(){
+  // Si es cliente, forzar su propio ID en el campo de cliente
+  if(_r==='cliente' && _ci){
+    const sel=g('vcl');
+    if(sel) sel.value=_ci;
+  }
+  const d={clienteId:_r==='cliente'?_ci:v('vcl'),inmuebleCodigo:v('vin'),asesorId:v('vas'),fechayHora:v('vfh').replace('T',' '),estado:v('ves'),observaciones:v('vob')};
+  if(!d.clienteId||!d.inmuebleCodigo){tst('Cliente e inmueble obligatorios','err');return;}
+  const r=await api('/visitas','POST',d);
+  if(r.ok){cM('mv');tst('Visita agendada','ok');ldv();}else tst(r.error,'err');
+}
+
+// ── Operaciones ───────────────────────────────────────────────────────────────
+async function ldo(){
+  const r=await api('/operaciones');if(!r.ok)return;
+  const ops=r.data||[];
+  g('tbo').innerHTML=ops.length?ops.map(o=>`<tr><td class="mono">${o.id}</td><td>${bd(o.tipo)}</td><td>${o.inmuebleCodigo||'?'}</td><td>${o.clienteNombre||'?'}</td><td>${o.asesorNombre||'?'}</td><td class="mono" style="color:var(--terra)">${fp(o.valor)}</td><td class="mono">${o.comision||0}%</td><td>${bd(o.estado)}</td></tr>`).join('')
+  :'<tr><td colspan="8"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div class="et">Sin operaciones</div></div></td></tr>';
+}
+
+async function rgo(){
+  const d={inmuebleCodigo:v('oin'),clienteId:v('ocl'),asesorId:v('oas'),tipo:v('oti'),valor:v('ovl'),comision:v('ocm')};
+  const r=await api('/operaciones','POST',d);
+  if(r.ok){cM('mo');tst('Operación registrada','ok');ldo();}else tst(r.error,'err');
+}
+
+// ── Contratos ─────────────────────────────────────────────────────────────────
+async function ldct(){
+  const r=await api('/contratos');if(!r.ok)return;
+  const cts=r.data||[];
+  g('tbct').innerHTML=cts.length?cts.map(c=>`<tr><td class="mono">${c.id}</td><td>${bd(c.tipo)}</td><td>${c.inmuebleCodigo||'?'}</td><td>${c.clienteNombre||'?'}</td><td style="font-size:12px">${c.fechaInicio||'—'}</td><td style="font-size:12px">${c.fechaFin||'—'}</td><td class="mono">${fp(c.valorMensual)}</td><td>${bd(c.estado)}</td></tr>`).join('')
+  :'<tr><td colspan="8"><div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="et">Sin contratos</div></div></td></tr>';
+}
+
+async function rgct(){
+  const d={inmuebleCodigo:v('ctin'),clienteId:v('ctcl'),tipo:v('cttp'),valorMensual:v('ctvm')};
+  const r=await api('/contratos','POST',d);
+  if(r.ok){cM('mct');tst('Contrato registrado','ok');ldct();}else tst(r.error,'err');
+}
+
+// ── Alertas ────────────────────────────────────────────────────────────────────
+async function lda(){
+  const r=await api('/alertas');if(!r.ok)return;
+  const reg=r.registro||[];
+  const top=r.prioritaria;
+  g('pqp').innerHTML=reg.filter(a=>!a.resuelta).length?reg.filter(a=>!a.resuelta).map(a=>`<div class="ai ${a.nivel==='ALTA'||a.nivel==='CRITICA'?'aa':a.nivel==='MEDIA'?'am':'ab'}"><div class="ad"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">${a.mensaje}</div><div style="font-size:11px;color:var(--t3)">${a.tipo||''} · ${a.fecha||''}</div></div>${bd(a.nivel||'MEDIA')}</div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="et">Sin alertas activas</div></div>';
+  g('alrg').innerHTML=reg.length?reg.map(a=>`<div class="hr"><div class="hd" style="background:${a.resuelta?'var(--ok)':'var(--terra)'}"></div><div style="flex:1;font-size:13px">${a.mensaje}</div>${bd(a.nivel||'MEDIA')}</div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="et">Sin registros</div></div>';
+}
+
+async function dtal(){
+  const r=await api('/alertas/detectar','POST');
+  tst(r.msg||'Detección completada','ok');lda();
+}
+
+async function rsal(){
+  const r=await api('/alertas/resolver','POST');
+  tst(r.msg||'Alerta resuelta','ok');lda();
+}
+
+// ── Recomendaciones ────────────────────────────────────────────────────────────
+// Carga recomendaciones diferenciada por rol
+async function ldRec(){
+  const esCliente = _r === 'cliente';
+  const elAdmin = g('rec-admin'), elCli = g('rec-cliente');
+  if(elAdmin) elAdmin.style.display = esCliente ? 'none' : '';
+  if(elCli)   elCli.style.display   = esCliente ? '' : 'none';
+  g('rcrs').innerHTML = '';
+
+  if(esCliente && _ci){
+    // Cliente: mostrar directamente SUS recomendaciones
+    const r = await api('/recomendaciones?clienteId='+_ci);
+    const inms = r.data||[];
+    const cnt = g('rec-cnt');
+    if(cnt) cnt.textContent = inms.length;
+    g('rcrs').innerHTML = inms.length
+      ? `<div class="pgd">${inms.map(pc).join('')}</div>`
+      : '<div class="crd"><div class="cb"><div class="emp"><div class="et">Por ahora no hay inmuebles que coincidan exactamente con tu presupuesto, zona y tipo preferido. Explora el catálogo completo.</div></div></div></div>';
+  } else if(!esCliente){
+    // Admin/asesor: llenar el select y esperar selección
+    fsl();
+  }
+}
+
+// Recomendaciones para un cliente específico (uso interno y desde el select admin)
+async function crcCliente(cid){
+  if(!cid) return;
+  const r = await api('/recomendaciones?clienteId='+cid);
+  const inms = r.data||[];
+  const cnt = g('rec-cnt');
+  if(cnt) cnt.textContent = inms.length;
+  g('rcrs').innerHTML = inms.length
+    ? `<div class="pgd">${inms.map(pc).join('')}</div>`
+    : '<div class="emp"><div class="et">No hay inmuebles disponibles que coincidan con tu presupuesto, zona y tipo deseado.</div></div>';
+}
+
+// Llamado desde el select de admin
+async function crc(){
+  const cid = v('rccli'); if(!cid) return;
+  const r = await api('/recomendaciones?clienteId='+cid);
+  const cl = _cl.find(c=>c.id===cid);
+  const inms = r.data||[];
+  g('rcrs').innerHTML = `<div class="crd"><div class="ch"><span class="ctt">Recomendaciones para ${cl?cl.nombre:cid}</span><span class="bdg bk">${inms.length} coincidencias</span></div><div class="cb">${
+    inms.length
+      ? `<div class="pgd">${inms.map(pc).join('')}</div>`
+      : '<div class="emp"><div class="et">Sin coincidencias para este cliente</div></div>'
+  }</div></div>`;
+}
+
+
+// ── Intenciones (req. 4.5 PDF) ────────────────────────────────────────────────
+async function ldt(){
+  // Asegurar que los inmuebles estén cargados para el select del modal
+  if(!_im.length){ const ri=await api('/inmuebles'); if(ri.ok) _im=ri.data||[]; }
+  const cid=(_r==='cliente')?_ci:'';
+  const url=cid?'/intenciones?clienteId='+cid:'/intenciones';
+  const r=await api(url);
+  const lista=r.data||[];
+
+  const SVG_INT='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+
+  g('intac').innerHTML=lista.filter(i=>i.estado==='ACTIVA').length
+    ? lista.filter(i=>i.estado==='ACTIVA').map(i=>`<div class="ic2">
+        <div class="ico ${i.tipo==='COMPRA'?'ick':'ica'}">${SVG_INT}</div>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:13px">${i.tipo} — ${i.inmuebleCodigo}</div>
+          <div style="font-size:12px;color:var(--t2)">${_r!=='cliente'?i.clienteNombre+' · ':''} Oferta: ${fp(i.oferta)}</div>
+          <div style="font-size:11px;color:var(--t3)">${i.observaciones||'—'} · ${(i.fecha||'').slice(0,16)}</div>
+        </div>
+        ${bd(i.estado)}
+      </div>`).join('')
+    : '<div class="emp"><div class="ei svg-ei">'+SVG_INT+'</div><div class="et">Sin intenciones activas</div></div>';
+
+  // Alta probabilidad de cierre (intenciones activas con oferta alta)
+  const cierre=lista.filter(i=>i.estado==='ACTIVA'&&i.oferta>1000000);
+  g('intci').innerHTML=cierre.length
+    ? cierre.map(i=>`<div class="hr"><div class="hd" style="background:var(--ok)"></div><div style="flex:1;font-size:13px;font-weight:600">${_r!=='cliente'?i.clienteNombre:i.inmuebleCodigo}</div><div style="font-size:12px;color:var(--t2)">${i.tipo} · ${fp(i.oferta)}</div><span class="bdg bo">Alto potencial</span></div>`).join('')
+    : '<div class="emp"><div class="et">Sin datos</div></div>';
+
+  // Historial de consultas del cliente
+  if(_r==='cliente'&&_ci){
+    const rp=await api('/cliente/portal?clienteId='+_ci);
+    const h=rp.historialConsultas||rp.historialVisitas||[];
+    g('inthi').innerHTML=h.length
+      ? h.map(x=>`<div class="hr"><div class="hd" style="background:var(--info)"></div><div style="flex:1;font-size:13px">${x.inmuebleCod||x.codigo||'?'} — ${x.tipo||''}</div><div style="font-size:11px;color:var(--t3)">${(x.fechayHora||'').slice(0,16)}</div></div>`).join('')
+      : '<div class="emp"><div class="et">Sin historial</div></div>';
+  } else if(g('inthi')){
+    // Para admin: mostrar todos los inmuebles más consultados
+    const ri=await api('/ranking/inmuebles');
+    const rim=(ri.ranking||ri.data||[]).slice(0,5);
+    g('inthi').innerHTML=rim.length
+      ? rim.map((i,n)=>`<div class="hr"><div class="hd" style="background:var(--terra)"></div><div style="flex:1;font-size:13px">${n+1}. ${i.codigo} — ${i.tipo}</div><span class="bdg bt">${i.visitas||0} visitas</span></div>`).join('')
+      : '<div class="emp"><div class="et">Sin datos</div></div>';
+  }
+}
+
+
+// ── Registrar intención ────────────────────────────────────────────────────────
+async function rgin(){
+  const cid=_ci||_cl[0]?.id||'';
+  if(!cid){tst('Inicia sesión como cliente para registrar una intención','warn');return;}
+  const inm=v('intn');
+  if(!inm){tst('Selecciona un inmueble','err');return;}
+  const d={clienteId:cid,inmuebleCodigo:inm,tipo:v('intt'),oferta:v('intof')||'0',observaciones:v('intob')};
+  const r=await api('/intenciones','POST',d);
+  if(r.ok){cM('mint');tst('Intención de '+d.tipo.toLowerCase()+' registrada','ok');ldt();}
+  else tst(r.error||r.msg||'Error','err');
+}
+
+// ── Editar inmueble (req. 6.1 PDF) ────────────────────────────────────────────
+function abrirEditar(cod){
+  const i=_im.find(x=>x.codigo===cod);if(!i)return;
+  fsl();
+  ['ic:codigo','id2:direccion','ici:ciudad','iz:zona','it:tipo','ifn:finalidad','ip:precio','ia:area','ih:habitaciones','ib:banios','ie:estado'].forEach(p=>{
+    const[eid,prop]=p.split(':');const e=g(eid);if(e)e.value=i[prop]||'';
+  });
+  const btn=document.querySelector('#mi .mft button.bg2');
+  if(btn){btn.textContent='Actualizar';btn.onclick=()=>actualizarInmueble(cod);}
+  const ttl=document.querySelector('#mi .mtt');if(ttl)ttl.textContent='Editar Inmueble';
+  g('mi').classList.add('on');
+}
+async function actualizarInmueble(cod){
+  const d={codigo:cod,direccion:v('id2'),zona:v('iz'),precio:v('ip'),area:v('ia'),
+    habitaciones:v('ih'),banios:v('ib'),finalidad:v('ifn')};
+  await api('/inmuebles/editar','POST',d);
+  const nuevoEstado=v('ie');
+  const inm=_im.find(x=>x.codigo===cod);
+  if(inm&&nuevoEstado&&nuevoEstado!==inm.estado)
+    await api('/inmuebles','PUT',{codigo:cod,estado:nuevoEstado});
+  cM('mi');tst('Inmueble actualizado','ok');
+  const btn=document.querySelector('#mi .mft button.bg2');
+  if(btn){btn.textContent='Registrar';btn.onclick=rgi;}
+  const ttl=document.querySelector('#mi .mtt');if(ttl)ttl.textContent='Registrar Inmueble';
+  ldi();
+}
+
+// ── Editar cliente (req. 6.2 PDF) ─────────────────────────────────────────────
+function abrirEditarCliente(id){
+  const c=_cl.find(x=>x.id===id);if(!c)return;
+  ['cid:id','cnm:nombre','ccr:correo','cte:telefono','ctp:tipoCliente','cpr:presupuesto','czn:zonasInteres','cti:tipoDeseado','cmh:minHabitaciones'].forEach(p=>{
+    const[eid,prop]=p.split(':');const e=g(eid);if(e)e.value=(c[prop]||c.tipo||'');
+  });
+  const btn=document.querySelector('#mc .mft button.bg2');
+  if(btn){btn.textContent='Actualizar';btn.onclick=()=>actualizarCliente(id);}
+  const ttl=document.querySelector('#mc .mtt');if(ttl)ttl.textContent='Editar Cliente';
+  g('mc').classList.add('on');
+}
+async function actualizarCliente(id){
+  const d={id,nombre:v('cnm'),telefono:v('cte'),presupuesto:v('cpr'),zonasInteres:v('czn')};
+  const r=await api('/clientes/editar','POST',d);
+  cM('mc');tst(r.msg||'Cliente actualizado','ok');
+  const btn=document.querySelector('#mc .mft button.bg2');
+  if(btn){btn.textContent='Registrar';btn.onclick=rgc;}
+  const ttl=document.querySelector('#mc .mtt');if(ttl)ttl.textContent='Registrar Cliente';
+  ldcl();
+}
+
+// ── Comportamiento ─────────────────────────────────────────────────────────────
+async function ldcm(){
+  const r=await api('/comportamiento');
+  const h=r.hallazgos||[];
+  g('cmres').innerHTML=h.length?h.map(a=>`<div class="ai ${a.nivel==='ALTA'||a.nivel==='CRITICA'?'aa':a.nivel==='MEDIA'?'am':'ab'}"><div class="ad"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">${a.descripcion}</div><div style="font-size:11px;color:var(--t3)">${a.tipo||''} · Entidad: ${a.entidad||''}</div></div>${bd(a.nivel||'MEDIA')}</div>`).join('')
+  :'<div class="emp"><div class="ei svg-ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="et">Sin comportamientos inusuales detectados</div></div>';
+  if(h.length)tst(h.length+' patrón(es) detectado(s)','warn');
+  else tst('Sin comportamientos inusuales','ok');
+}
+
+// ── Reportes completos (req. 8, 9 PDF) ────────────────────────────────────────
+async function ldr(){
+  // Ranking de zonas
+  const rz=await api('/ranking/zonas');
+  const zonas=rz.ranking||[];
+  g('rzo').innerHTML=zonas.length?zonas.map((z,i)=>`<div class="brow"><div class="blbl"><span><strong>${i+1}.</strong> ${z.zona}</span><span style="color:var(--green);font-weight:700">${z.cantidad} inmuebles</span></div><div class="bbg"><div class="bfl" style="background:var(--green);width:${(z.cantidad/(zonas[0]?.cantidad||1))*100}%"></div></div></div>`).join('')
+  :'<div class="emp"><div class="et">Sin datos</div></div>';
+
+  // Ranking asesores por efectividad
+  const ra=await api('/ranking/asesores');
+  const asrs=ra.ranking||[];
+  g('ras').innerHTML=asrs.length?asrs.map((a,i)=>`<div class="brow"><div class="blbl"><span><strong>${i+1}.</strong> ${a.nombre}</span><span style="color:var(--terra);font-weight:700">${a.efectividad||0}% · ${a.cierres||0} cierres</span></div><div class="bbg"><div class="bfl" style="background:var(--terra);width:${Math.min(a.efectividad||0,100)}%"></div></div></div>`).join('')
+  :'<div class="emp"><div class="et">Sin datos</div></div>';
+
+  // BST de precios
+  const rb=await api('/bst');
+  const precios=rb.inorden||[];
+  if(g('rbst'))g('rbst').innerHTML=precios.length
+    ?`<div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--t2);line-height:1.8">${precios.map(p=>fp(p)).join(' → ')}</div><div style="margin-top:8px;font-size:11px;color:var(--t3)">Altura del árbol: <strong>${rb.altura||0}</strong> | Nodos: <strong>${rb.tamanio||0}</strong></div>`
+    :'<div class="emp"><div class="et">BST vacío</div></div>';
+
+  // Grafo de zonas
+  const rg2=await api('/grafo');
+  const nodos=rg2.nodos||[],aristas=rg2.aristas||[];
+  if(g('rgrf'))g('rgrf').innerHTML=nodos.length
+    ?`<div style="margin-bottom:10px"><span style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--t3);letter-spacing:.1em">Zonas:</span> <span style="font-size:13px">${nodos.join(' · ')}</span></div><div style="font-size:12px;color:var(--t2)">${aristas.map(a=>`<span style="background:var(--s2);padding:2px 8px;border-radius:6px;margin:2px;display:inline-block">${a.origen} ↔ ${a.destino} <strong>${a.peso}km</strong></span>`).join('')}</div>`
+    :'<div class="emp"><div class="et">Grafo vacío</div></div>';
+
+  // Inmuebles por demanda
+  const rd=await api('/ranking/inmuebles');
+  const dem=(rd.ranking||rd.data||[]).slice(0,6);
+  if(g('rdm'))g('rdm').innerHTML=dem.length?dem.map((i,n)=>`<div class="brow"><div class="blbl"><span><strong>${n+1}.</strong> ${i.codigo} — ${i.tipo}</span><span style="color:var(--terra);font-weight:700">${i.visitas||0} visitas</span></div><div class="bbg"><div class="bfl" style="background:var(--terra);width:${((i.visitas||0)/Math.max(1,...dem.map(x=>x.visitas||0)))*100}%"></div></div></div>`).join('')
+  :'<div class="emp"><div class="et">Sin datos</div></div>';
+
+  // Dashboard resumen
+  const dash=await api('/dashboard');
+  if(dash.ok&&g('rgn'))g('rgn').innerHTML=`<div class="sg" style="margin:0">
+    <div class="sc c1"><div class="sv">${dash.totalInmuebles||0}</div><div class="sl">Inmuebles</div></div>
+    <div class="sc c2"><div class="sv">${dash.totalClientes||0}</div><div class="sl">Clientes</div></div>
+    <div class="sc c3"><div class="sv">${dash.totalAsesores||0}</div><div class="sl">Asesores</div></div>
+    <div class="sc c4"><div class="sv">${dash.totalOperaciones||0}</div><div class="sl">Operaciones</div></div>
+    <div class="sc c5"><div class="sv">${dash.totalContratos||0}</div><div class="sl">Contratos</div></div>
+    <div class="sc c6"><div class="sv">${dash.totalAlertas||0}</div><div class="sl">Alertas</div></div>
+  </div>`;
+}
+
+
+// ── Perfil ─────────────────────────────────────────────────────────────────────
+async function ldp(){
+  const r=await api('/perfil');
+  if(!r.ok)return;
+  g('pnm').value=r.nombre||'';
+  g('pnm2').textContent=r.nombre||'';
+  g('pcr').textContent=r.correo||'';
+  g('pc2').value=r.correo||'';
+  g('pte').value=r.telefono||'';
+  g('prl2').textContent=(r.rol||'').toUpperCase();
+  // Mostrar foto guardada o SVG por defecto
+  const pavSvgs={
+    admin:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"/></svg>',
+    cliente:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    asesor:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  };
+  const pavSvg=g('pav-svg'), pavImg=g('pav-img');
+  if(r.fotoPerfil&&r.fotoPerfil.trim()){
+    if(pavImg){pavImg.src=r.fotoPerfil;pavImg.style.display='block';}
+    if(pavSvg) pavSvg.style.display='none';
+  } else {
+    if(pavSvg){pavSvg.style.display='';pavSvg.innerHTML=pavSvgs[_r]||pavSvgs.cliente;}
+    if(pavImg) pavImg.style.display='none';
+  }
+}
+
+// ── Foto de perfil ─────────────────────────────────────────────────────────────
+function chFotoPerfil(){ g('pav-input')?.click(); }
+
+async function onFotoPerfilChange(input){
+  const file=input.files[0]; if(!file) return;
+  if(file.size>5*1024*1024){tst('Imagen mayor a 5 MB','warn');return;}
+  const b64=await fileToBase64(file);
+  // Preview inmediato
+  const pavImg=g('pav-img'),pavSvg=g('pav-svg');
+  if(pavImg){pavImg.src=b64;pavImg.style.display='block';}
+  if(pavSvg) pavSvg.style.display='none';
+  // Actualizar la foto en topbar también
+  const upEl=g('up');
+  // Enviar al servidor
+  const r=await api('/perfil/foto','POST',{userId:_uid,foto:b64});
+  if(r.ok){
+    tst('Foto de perfil actualizada','ok');
+    // actualizar también la burbuja del topbar si tiene avatar
+  } else {
+    tst('No se pudo guardar en el servidor (modo local)','info');
+    // En modo local guardamos en memoria
+    _fotosPerfil[_uid]=b64;
+  }
+  input.value='';
+}
+
+// ── Foto de inmueble ───────────────────────────────────────────────────────────
+let _pendingInmFoto=null; // base64 de la foto pendiente al registrar
+
+function onInmFotoChange(input){
+  const file=input.files[0]; if(!file) return;
+  if(file.size>5*1024*1024){tst('Imagen mayor a 5 MB','warn');return;}
+  fileToBase64(file).then(b64=>{
+    _pendingInmFoto=b64;
+    const prev=g('inm-foto-preview'),drop=g('inm-foto-drop');
+    if(prev){prev.src=b64;prev.style.display='block';}
+    if(drop) drop.style.display='none';
+  });
+  input.value='';
+}
+
+function onInmFotoDrop(e){
+  e.preventDefault();
+  const file=e.dataTransfer?.files?.[0]; if(!file) return;
+  const fakeInput={files:[file]};
+  onInmFotoChange(fakeInput);
+}
+
+// Guarda foto del inmueble después de registrarlo
+async function guardarFotoInmueble(codigo){
+  if(!_pendingInmFoto) return;
+  const r=await api('/inmuebles/foto','POST',{codigo,foto:_pendingInmFoto});
+  if(r.ok){
+    // guardar en _mp para que la tarjeta la muestre inmediatamente
+    _mp[codigo]=r.url||_pendingInmFoto;
+  } else {
+    // modo local: guardar en _mp directamente
+    _mp[codigo]=_pendingInmFoto;
+  }
+  _pendingInmFoto=null;
+  // Limpiar preview
+  const prev=g('inm-foto-preview'),drop=g('inm-foto-drop');
+  if(prev){prev.src='';prev.style.display='none';}
+  if(drop) drop.style.display='flex';
+  g('inm-foto-input').value='';
+}
+
+// ── Botón de foto en tarjetas de inmueble (solo admin) ─────────────────────────
+function abrirFotoInmueble(cod){
+  const input=document.createElement('input');
+  input.type='file'; input.accept='image/*';
+  input.onchange=async e=>{
+    const file=e.target.files[0]; if(!file) return;
+    if(file.size>5*1024*1024){tst('Imagen mayor a 5 MB','warn');return;}
+    const b64=await fileToBase64(file);
+    const r=await api('/inmuebles/foto','POST',{codigo:cod,foto:b64});
+    _mp[cod]=r.ok?(r.url||b64):b64;
+    tst('Foto actualizada','ok');
+    rg(_im); // re-renderizar tarjetas
+  };
+  input.click();
+}
+
+// Helper: File → base64
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>res(e.target.result);
+    reader.onerror=rej;
+    reader.readAsDataURL(file);
+  });
+}
+
+// Caché local de fotos de perfil (modo offline)
+const _fotosPerfil={};
+
+
+async function gpf(){
+  const d={nombre:v('pnm'),telefono:v('pte'),nuevaContrasenia:v('ppw')};
+  const r=await api('/perfil','POST',d);
+  if(r.ok){g('up').textContent=d.nombre||g('up').textContent;g('pnm2').textContent=d.nombre;tst('Perfil actualizado','ok');g('ppw').value='';}
+  else tst(r.error,'err');
+}
+
+// ── Historial (pila) ───────────────────────────────────────────────────────────
+async function dsh(){
+  const r=await api('/historial','POST');
+  tst(r.msg||'Acción deshecha','ok');ldd();
+}
+
+// ── Modales ────────────────────────────────────────────────────────────────────
+function oM(id){fsl();g(id).classList.add('on');}
+function cM(id){g(id).classList.remove('on');}
+
+// ── Reportes endpoint faltante (graceful) ─────────────────────────────────────
+// Sobreescribir api para que /reportes no falle
+const _api=api;
+async function safeApi(path,...a){try{return await _api(path,...a);}catch(e){return{ok:false,data:[]};}}
+
+// ── CHAT ──────────────────────────────────────────────────────────────────────
+window._chatSSE         = null;
+window._chatStaffSSE    = null;
+window._chatCanalActivo = '';
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function chatEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function chatBurbuja(msg){
+  const esYo    = msg.remitenteId === _uid || msg.autorId === _uid;
+  const nombre  = msg.remitenteNombre || msg.autorNombre || '?';
+  const rol     = msg.remitenteRol    || msg.autorRol    || '';
+  const texto   = msg.contenido       || msg.texto       || '';
+  const hora    = (msg.fecha||'').toString().slice(11,16);
+  const esStaff = rol==='admin'||rol==='asesor';
+  let cls = esYo ? 'yo' : (esStaff ? 'staff' : 'otro');
+  const tag = esStaff
+    ? `<span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7">${rol.toUpperCase()}</span> `
+    : '';
+  return `<div class="chat-wrap ${cls}">
+    <div class="chat-burbuja ${cls}">${tag}${chatEsc(texto)}</div>
+    <div class="chat-meta">${esYo?'Tú':chatEsc(nombre)} · ${hora}</div>
+  </div>`;
+}
+
+function chatAppend(contId, msg){
+  const cont = g(contId); if(!cont) return;
+  const empty = cont.querySelector('.emp'); if(empty) empty.remove();
+  cont.insertAdjacentHTML('beforeend', chatBurbuja(msg));
+  cont.scrollTop = cont.scrollHeight;
+}
+
+// ── Carga según rol ────────────────────────────────────────────────────────────
+async function ldChat(){
+  const esCli = _r === 'cliente';
+  const vCli   = g('chat-cli-view');
+  const vStaff = g('chat-staff-view');
+  if(vCli)   vCli.style.display   = esCli ? '' : 'none';
+  if(vStaff) vStaff.style.display = esCli ? 'none' : '';
+
+  if(esCli) {
+    await chatCliCargar();
+  } else {
+    await chatStaffCargarSalas();
+    chatStaffConectarSSE();
+  }
+}
+
+// ── CLIENTE ────────────────────────────────────────────────────────────────────
+async function chatCliCargar(){
+  if(!_ci){ console.warn('Chat: _ci vacío'); return; }
+  const cont = g('chat-cli-msgs');
+  if(!cont) return;
+  cont.innerHTML = '<div class="emp" id="chat-cli-empty"><div class="et">Escribe tu primera pregunta.</div></div>';
+  chatCliSetStatus('Conectando…','var(--warn)');
+
+  // Cargar historial
+  const r = await api('/chat/mensajes?canal='+_ci);
+  if(r.ok && r.mensajes && r.mensajes.length){
+    cont.innerHTML = '';
+    r.mensajes.forEach(m => chatAppend('chat-cli-msgs', m));
+  }
+
+  // SSE
+  if(!_serverOk){ chatCliSetStatus('Modo local','var(--t3)'); return; }
+  if(window._chatSSE){ try{window._chatSSE.close();}catch(e){} }
+  const sse = new EventSource(API+'/chat/sse?canal='+_ci);
+  window._chatSSE = sse;
+  sse.onopen  = () => chatCliSetStatus('Conectado ●','var(--ok)');
+  sse.onerror = () => chatCliSetStatus('Reconectando…','var(--warn)');
+  sse.onmessage = e => {
+    try{
+      const msg = JSON.parse(e.data);
+      if(msg.tipo === 'connected'){ chatCliSetStatus('Conectado ●','var(--ok)'); return; }
+      // Evitar duplicar el propio mensaje (ya lo mostramos al enviar)
+      if(msg.remitenteId !== _uid) chatAppend('chat-cli-msgs', msg);
+    } catch(err){}
+  };
+}
+
+function chatCliSetStatus(txt, color){
+  const dot  = g('chat-cli-dot');
+  const stxt = g('chat-cli-stxt');
+  if(dot)  dot.style.background = color;
+  if(stxt) stxt.textContent = txt;
+}
+
+async function chatCliEnviar(){
+  const inp = g('chat-cli-input');
+  const txt = inp ? inp.value.trim() : '';
+  if(!txt){ return; }
+  if(!_ci){ tst('Error: sesión no iniciada','err'); return; }
+  inp.value = '';
+  const nombre = g('up') ? g('up').textContent : 'Cliente';
+  const d = {remitenteId:_uid, remitenteNombre:nombre, remitenteRol:'cliente',
+              canal:_ci, contenido:txt};
+  // Mostrar propio mensaje inmediatamente
+  chatAppend('chat-cli-msgs', {...d, fecha:new Date().toISOString()});
+  if(_serverOk){
+    const r = await api('/chat/enviar','POST',d);
+    if(!r.ok) tst('No se pudo enviar','err');
+  } else {
+    if(!window._localChat) window._localChat=[];
+    window._localChat.push({...d, id:'loc-'+Date.now(), fecha:new Date().toISOString().replace('T',' ').slice(0,19)});
+  }
+  inp.focus();
+}
+
+// ── ADMIN / ASESOR ─────────────────────────────────────────────────────────────
+async function chatStaffCargarSalas(){
+  const cont = g('chat-salas-lista'); if(!cont) return;
+  if(!_serverOk){
+    cont.innerHTML='<div class="emp"><div class="et">Requiere servidor Java activo</div></div>';
+    return;
+  }
+  const r = await api('/chat/canales');
+  if(!r.ok || !r.canales || !r.canales.length){
+    cont.innerHTML='<div class="emp"><div class="et">Sin conversaciones activas</div></div>';
+    return;
+  }
+  cont.innerHTML = r.canales.map(c => `
+    <div class="chat-canal-item ${window._chatCanalActivo===c.canal?'on':''}"
+         onclick="chatStaffAbrirSala('${c.canal}','${chatEsc(c.clienteNombre||c.canal)}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span class="chat-canal-nm">${chatEsc(c.clienteNombre||c.canal)}</span>
+        <span style="font-size:10px;color:var(--t3)">${c.totalMensajes||0} msg</span>
+      </div>
+      <div class="chat-canal-preview">${c.ultimoMensaje ? chatEsc(c.ultimoMensaje.contenido||c.ultimoMensaje.texto||'') : ''}</div>
+    </div>`).join('');
+}
+
+function chatStaffConectarSSE(){
+  if(!_serverOk) return;
+  if(window._chatStaffSSE){ try{window._chatStaffSSE.close();}catch(e){} }
+  const sse = new EventSource(API+'/chat/sse?canal=admin');
+  window._chatStaffSSE = sse;
+  sse.onmessage = e => {
+    try{
+      const msg = JSON.parse(e.data);
+      if(msg.tipo==='connected') return;
+      // Si es del canal activo, mostrarlo en tiempo real
+      if(msg.destinatarioId === window._chatCanalActivo)
+        chatAppend('chat-staff-msgs', msg);
+      // Refrescar la lista de salas
+      chatStaffCargarSalas();
+    } catch(err){}
+  };
+}
+
+async function chatStaffAbrirSala(canal, nombre){
+  window._chatCanalActivo = canal;
+  const tit   = g('chat-staff-titulo');
+  const badge = g('chat-staff-badge');
+  const wrap  = g('chat-staff-inp-wrap');
+  if(tit)   tit.textContent = nombre;
+  if(badge){ badge.textContent = canal; badge.style.display=''; }
+  if(wrap)  wrap.style.display = 'flex';
+  const cont = g('chat-staff-msgs');
+  if(cont) cont.innerHTML = '<div class="emp"><div class="et">Cargando…</div></div>';
+  const r = await api('/chat/mensajes?canal='+canal);
+  if(cont) cont.innerHTML = '';
+  if(r.ok && r.mensajes && r.mensajes.length){
+    r.mensajes.forEach(m => chatAppend('chat-staff-msgs', m));
+  } else if(cont) {
+    cont.innerHTML='<div class="emp"><div class="et">Sin mensajes aún</div></div>';
+  }
+  chatStaffCargarSalas(); // resaltar sala activa
+}
+
+async function chatStaffEnviar(){
+  const inp = g('chat-staff-input');
+  const txt = inp ? inp.value.trim() : '';
+  if(!txt) return;
+  if(!window._chatCanalActivo){ tst('Selecciona una conversación primero','warn'); return; }
+  if(!_serverOk){ tst('Requiere servidor Java activo','warn'); return; }
+  inp.value = '';
+  const nombre = g('up') ? g('up').textContent : _r;
+  const d = {remitenteId:_uid, remitenteNombre:nombre, remitenteRol:_r,
+              canal:window._chatCanalActivo, contenido:txt};
+  chatAppend('chat-staff-msgs', {...d, fecha:new Date().toISOString()});
+  await api('/chat/enviar','POST',d);
+  inp.focus();
+}
+
+
+// ════════════════════════════════════════════════════════════════════════════
+// CHATBOT IA — usa Anthropic API directamente desde el navegador
+// ════════════════════════════════════════════════════════════════════════════
+
+const AI_HISTORY  = [];   // historial de la conversación actual
+let   AI_THINKING = false;
+
+// Contexto del sistema — describe la inmobiliaria y los datos actuales
+function aiSysPrompt(){
+  const totalInm = _im.length || 8;
+  const disponibles = _im.filter(i=>i.estado==='DISPONIBLE').length || 5;
+  const zonas = [...new Set(_im.map(i=>i.zona).filter(Boolean))].join(', ') || 'Norte, Sur, Centro, Rural';
+  const tipos = [...new Set(_im.map(i=>i.tipo).filter(Boolean))].join(', ')  || 'Apartamento, Casa, Local, Oficina, Lote, Bodega';
+  const rol   = _r ? `El usuario actual tiene rol: ${_r.toUpperCase()}.` : '';
+
+  return `Eres el asistente virtual de PropTech, una plataforma inmobiliaria digital de Armenia y el Eje Cafetero (Colombia), desarrollada para la Universidad del Quindío 2026-1.
+
+DATOS ACTUALES DEL SISTEMA:
+- Inmuebles registrados: ${totalInm} (${disponibles} disponibles)
+- Zonas activas: ${zonas}
+- Tipos de inmueble: ${tipos}
+- Clientes registrados: ${_cl.length || 3}
+- Asesores: ${_as.length || 3}
+${rol}
+
+CAPACIDADES DEL SISTEMA:
+• Gestión de inmuebles: registro, búsqueda, filtros, estados (DISPONIBLE, RESERVADO, ARRENDADO, VENDIDO)
+• Gestión de clientes: registro, perfil, favoritos, historial de consultas
+• Asesores: asignación de inmuebles, visitas, efectividad
+• Visitas: agenda, cola FIFO, estados (PENDIENTE, CONFIRMADA, REALIZADA, CANCELADA, REPROGRAMADA)
+• Operaciones: ARRIENDO, VENTA, RENOVACIÓN, CANCELACIÓN DE NEGOCIO
+• Contratos y comisiones automáticas
+• Alertas automáticas: contratos por vencer, inmuebles sin actividad, sobrecarga de asesores
+• Recomendaciones personalizadas por presupuesto, zona y tipo
+• Intenciones de compra/arriendo con seguimiento
+• Chat de dudas en tiempo real entre clientes, asesores y admin
+• Reportes: ranking de zonas, ranking de asesores, BST de precios, grafo de zonas
+
+PRECIOS TÍPICOS EN ARMENIA (referencia):
+- Apartamentos: $150M–$450M venta / $800K–$2.5M arriendo
+- Casas: $280M–$1.800M venta / $1.2M–$4M arriendo
+- Locales comerciales: desde $200M
+- Lotes: desde $80M
+
+PROCESO DE NEGOCIO:
+1. Cliente se registra y define preferencias (presupuesto, zona, tipo)
+2. Asesor asigna inmuebles y coordina visitas
+3. Cliente agenda visita → asesor la confirma
+4. Si hay interés → cliente registra intención de compra/arriendo
+5. Se genera operación (venta/arriendo) → contrato
+6. Comisión típica: 3–5% sobre el valor de la operación
+
+Responde siempre en español, de forma clara, útil y amigable. Si el usuario pregunta datos específicos del sistema (inmuebles, precios concretos, disponibilidad), responde con la información que tienes. Si no tienes un dato preciso, explica el proceso o da rangos. Sé conciso — máximo 3 párrafos por respuesta salvo que se pida detalle.`;
+}
+
+// Añadir mensaje al panel
+function aiAddMsg(texto, rol, thinking=false){
+  const cont = g('ai-msgs');
+  if(!cont) return;
+  const hora = new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  const div  = document.createElement('div');
+  div.className = 'ai-msg ' + rol;
+  div.id = thinking ? 'ai-thinking-bubble' : '';
+  div.innerHTML = `<div class="ai-bubble ${rol}${thinking?' thinking':''}">${aiEsc(texto)}</div>
+    <div class="ai-time">${hora}</div>`;
+  cont.appendChild(div);
+  cont.scrollTop = cont.scrollHeight;
+  // Ocultar chips después del primer mensaje del usuario
+  if(rol === 'user'){
+    const chips = g('ai-chips');
+    if(chips) chips.style.display = 'none';
+  }
+  return div;
+}
+
+function aiEsc(s){
+  return (s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code style="background:var(--s3);padding:1px 5px;border-radius:4px;font-size:12px">$1</code>');
+}
+
+function aiToggle(){
+  const panel = g('ai-panel');
+  if(!panel) return;
+  const abierto = panel.classList.toggle('on');
+  // Si es la primera vez que se abre, mostrar bienvenida
+  if(abierto && g('ai-msgs') && !g('ai-msgs').querySelector('.ai-msg')){
+    const nombre = g('up') ? g('up').textContent : 'usuario';
+    aiAddMsg(`¡Hola${_r?', '+nombre:''}! Soy el asistente virtual de PropTech 🏠\n\nPuedo ayudarte con información sobre **inmuebles disponibles**, cómo **agendar visitas**, procesos de **compra y arriendo**, **contratos**, **comisiones** y mucho más.\n\n¿En qué te puedo ayudar hoy?`, 'bot');
+  }
+  if(abierto) setTimeout(()=>g('ai-input')?.focus(), 100);
+}
+
+function aiChip(el){
+  const txt = el.textContent;
+  g('ai-input').value = txt;
+  aiEnviar();
+}
+
+async function aiEnviar(){
+  if(AI_THINKING) return;
+  const inp  = g('ai-input');
+  const send = g('ai-send');
+  const txt  = inp ? inp.value.trim() : '';
+  if(!txt) return;
+
+  inp.value = '';
+  aiAddMsg(txt, 'user');
+  AI_HISTORY.push({ role:'user', content: txt });
+
+  AI_THINKING = true;
+  if(send) send.disabled = true;
+  const thinkDiv = aiAddMsg('Escribiendo…', 'bot', true);
+
+  try {
+    const res = await fetch(API + '/ia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userMessage: txt,
+        system:      aiSysPrompt(),
+        history:     JSON.stringify(AI_HISTORY.slice(0,-1).slice(-8)) // últimos 8 turnos sin el actual
+      })
+    });
+
+    const data = await res.json();
+    if(thinkDiv && thinkDiv.parentNode) thinkDiv.remove();
+
+    if(data.ok && data.text){
+      aiAddMsg(data.text, 'bot');
+      AI_HISTORY.push({ role:'assistant', content: data.text });
+    } else {
+      const err = data.error || 'El asistente no respondió. Intenta de nuevo.';
+      aiAddMsg('⚠ ' + err, 'bot');
+    }
+  } catch(err){
+    if(thinkDiv && thinkDiv.parentNode) thinkDiv.remove();
+    aiAddMsg('No se pudo conectar con el asistente. ¿El servidor Java está activo?', 'bot');
+    console.error('[AI]', err);
+  } finally {
+    AI_THINKING = false;
+    if(send) send.disabled = false;
+    inp?.focus();
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  g("tov").addEventListener("click",cT);
+  document.querySelectorAll(".mo").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("on");}));
+  // Restaurar sesión al recargar — si hay sesión guardada, no mostrar login
+  if(restaurarSesion()){
+    chkBackend(); // verificar backend en segundo plano
+  } else {
+    srl('admin');
+    chkBackend();
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&g('lw').style.display!=='none')lgn();});
+</script>
+</body>
+</html>
